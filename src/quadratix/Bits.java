@@ -210,7 +210,7 @@ public class Bits extends Number implements Comparable<Bits>, Serializable, Clon
 	/* COMPARABLE OVERRIDE */
 	
 	@Override
-	public int compareTo(Bits o) {
+	public int compareTo(@NotNull Bits o) {
 		return Integer.compare(intValue(), o.intValue());
 	}
 	

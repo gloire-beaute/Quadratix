@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class TabuTest {
 	
 	static final int NB_BITS = 4;
@@ -42,15 +44,6 @@ class TabuTest {
 				put(new Bits(13, NB_BITS), 11);
 				put(new Bits(14, NB_BITS), 1);
 				put(new Bits(15, NB_BITS), 5);
-			}
-		};
-		final HashMap<Integer, Set<Bits>> reversedMapFitness = new HashMap<Integer, Set<Bits>>() {
-			{
-				for (Entry<Bits, Integer> entry : mapFitness.entrySet()) {
-					Set<Bits> set = getOrDefault(entry.getKey(), new HashSet<>());
-					set.add(entry.getKey());
-					put(entry.getValue(), set);
-				}
 			}
 		};
 		
@@ -116,14 +109,27 @@ class TabuTest {
 			
 			@Override
 			public int compare(Integer o1, Integer o2) {
-				return 0;
+				return o1.compareTo(o2);
 			}
 		};
+		
+		System.out.println("All neighbors in V:");
+		for (Bits b : Bits.generateAllPossibility(NB_BITS)) {
+			System.out.println(b + ":");
+			HashMap<Bits, ElementaryFunction<Bits>> vb = V.apply(b);
+			for (Bits k : vb.keySet())
+				System.out.println("\t" + k);
+		}
+		System.out.println();
 	}
 	
 	@Test
 	void search() {
 		Bits b = tabu.search(f, new Bits(0, NB_BITS), V, intOps, 5.0);
-		System.out.println("Result b: " + b);
+		System.out.println("Result: f(" + b + ") = " + f.apply(b));
+		System.out.println("(b = \"" + b.getBits() + "\"<2> = \"" + b.getValue() + "\"<10>)");
+		
+		assertEquals("1100", b.getBits());
+		assertEquals(0, f.apply(b));
 	}
 }

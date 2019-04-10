@@ -4,12 +4,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Function;
 
 public class Tabu<P, R> implements ISearch<P, R> {
 	
-	public static final int MAX_ITERATION = 10000;
+	public static final int MAX_ITERATION = 1000000;
 	
 	@Override
 	public P search(@NotNull Function<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0) {
@@ -19,35 +20,43 @@ public class Tabu<P, R> implements ISearch<P, R> {
 		TabuList<P, P> T = new TabuList<>(tabuSize);
 		
 		/**
-		 * Voisinage élémentaire
+		 * Elementary neighborhood
 		 */
-		Set<P> C;
+		HashSet<P> C = new HashSet<>();
 		P xmin = x0;
 		P xi = x0;
 		R fmin = f.apply(xmin);
-		ElementaryFunction<P> m = null;
 		int i = 0;
 		
 		do {
 			HashMap<P, ElementaryFunction<P>> elemFuns = V.apply(xi);
-			C = new HashSet<>(elemFuns.size());
+			C.clear();
 			C.addAll(elemFuns.keySet());
+			// At this point, C = V(xi).
 			
-			Set<Function<P, P>> forbiddenOperations = new HashSet<>();
-			for (Function<P, P> function : T)
-				C.remove(function.apply(xi));
+			// Now, {m(xi) | m∈T} must be removed from it.
+			for (Function<P, P> m : T)
+				C.remove(m.apply(xi));
 			
 			if (!C.isEmpty()) {
 				/* Choose y in C s.t. f(y) = min({f(z) | z in C}) */
 				
 				// Take the first element in C
 				P y = C.iterator().next();
+				if (i < 10)// TODO: DEBUG
+					System.out.println("y0 = " + y);
+				
+				// The default `m` is identity
+				ElementaryFunction<P> m = elemFuns.getOrDefault(y, ElementaryFunction.identity());
+				
 				for (P z : C) {
 					if (rOperation.compare(f.apply(z), f.apply(y)) < 0) {
 						y = z;
 						m = elemFuns.getOrDefault(y, m);
 					}
 				}
+				if (i < 10)// TODO: DEBUG
+					System.out.println("ymin = " + y);
 				
 				// Compute f(y) and save the result in `fy`
 				R fy = f.apply(y);
@@ -55,7 +64,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				// Compute the fitness variation
 				R deltaF = rOperation.minus(fy, f.apply(xi));
 				
-				if (rOperation.compare(deltaF, rOperation.getZero()) >= 0) {
+				if (rOperation.compare(deltaF, rOperation.getZero()) <= 0) {
 					// Put m^-1 in T
 					if (m != null)
 						T.add(m.invert());
@@ -69,7 +78,18 @@ public class Tabu<P, R> implements ISearch<P, R> {
 			}
 			
 			i++;
-		} while (i == MAX_ITERATION || C.isEmpty());
+		} while (i < MAX_ITERATION && !C.isEmpty());
+		
+		// TODO: DEBUG
+		if (i == MAX_ITERATION)
+			System.out.print("Reached maximum number of iteration.");
+		else
+			System.out.print("No item in C any longer.");
+		
+		System.out.println(" i = " + i + ", |C| = " + C.size());
+		
+		if (C.size() <= 10)
+			System.out.println("C = " + C.toString());
 		
 		return xmin;
 	}
