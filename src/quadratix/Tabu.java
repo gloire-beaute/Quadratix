@@ -1,6 +1,5 @@
 package quadratix;
 
-import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -13,10 +12,10 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	public static final int MAX_ITERATION = 10000;
 	
 	@Override
-	public P search(@NotNull MathFunction<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0) {
+	public P search(@NotNull Function<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0) {
 		return search(f, x0, V, rOperation, t0, 1);
 	}
-	public P search(@NotNull MathFunction<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0, int tabuSize) {
+	public P search(@NotNull Function<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0, int tabuSize) {
 		TabuList<P, P> T = new TabuList<>(tabuSize);
 		
 		/**

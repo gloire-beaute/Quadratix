@@ -54,4 +54,25 @@ public class TabuList<P, R> extends ArrayList<Function<P, R>> implements Seriali
 	public void setFixedSize(int fixedSize) {
 		this.fixedSize = fixedSize;
 	}
+	
+	/* OVERRIDE */
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof TabuList)) return false;
+		if (!super.equals(o)) return false;
+		TabuList<?, ?> tabuList = (TabuList<?, ?>) o;
+		return getFixedSize() == tabuList.getFixedSize();
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), getFixedSize());
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString();
+	}
 }
