@@ -2,10 +2,10 @@ package quadratix;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.Vector;
 import java.util.function.Function;
 
 public class Tabu<P, R> implements ISearch<P, R> {
@@ -24,19 +24,20 @@ public class Tabu<P, R> implements ISearch<P, R> {
 		 */
 		HashSet<P> C = new HashSet<>();
 		P xmin = x0;
-		P xi = x0;
+		Vector<P> xi = new Vector<>();
+		xi.add(x0);
 		R fmin = f.apply(xmin);
 		int i = 0;
 		
 		do {
-			HashMap<P, ElementaryFunction<P>> elemFuns = V.apply(xi);
+			HashMap<P, ElementaryFunction<P>> elemFuns = V.apply(xi.lastElement());
 			C.clear();
 			C.addAll(elemFuns.keySet());
 			// At this point, C = V(xi).
 			
 			// Now, {m(xi) | m∈T} must be removed from it.
 			for (Function<P, P> m : T)
-				C.remove(m.apply(xi));
+				C.remove(m.apply(xi.lastElement()));
 			
 			if (!C.isEmpty()) {
 				/* Choose y in C s.t. f(y) = min({f(z) | z in C}) */
@@ -62,7 +63,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				R fy = f.apply(y);
 				
 				// Compute the fitness variation
-				R deltaF = rOperation.minus(fy, f.apply(xi));
+				R deltaF = rOperation.minus(fy, f.apply(xi.lastElement()));
 				
 				if (rOperation.compare(deltaF, rOperation.getZero()) <= 0) {
 					// Put m^-1 in T
@@ -74,7 +75,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 					xmin = y;
 				}
 				
-				xi = y;
+				xi.add(y);
 			}
 			
 			i++;
