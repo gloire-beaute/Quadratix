@@ -1,5 +1,7 @@
 # Quadratix
 
+![Quadratix Logo][quadratix-logo]
+
 Quadratix is a student project that assigns a place to a set of machines using quadratic assignement methods.
 
 ## Project Structure
@@ -51,3 +53,5 @@ in the space of solution.
 [JavaDoc-List.size()]: https://docs.oracle.com/javase/8/docs/api/java/util/List.html#size--
 [Wikipedia-Endomorphism]: https://en.wikipedia.org/wiki/Endomorphism
 [Wikipedia-IdentityElement]: https://en.wikipedia.org/wiki/Identity_element
+
+[quadratix-logo]: res/img/quadratix64.png
