@@ -23,7 +23,7 @@ search.
 The `T` represents the type of the number-like object.
 
 * `MathFunction<P, R>`: Interface that inherits from [`Function`][JavaDoc-Function]. It add the method
-`Function<R, P> invert();` in addition to (`R apply(T t)`)[JavaDoc-Function.apply()]. `invert()` return the inverse of
+`Function<R, P> invert();` in addition to [`R apply(T t)`][JavaDoc-Function.apply()]. `invert()` return the inverse of
 the function defined by `apply()`.
 
 * `ElementaryFunction<P>`: Interface that inherits from `MathFunction<P, P>`. It represents an
