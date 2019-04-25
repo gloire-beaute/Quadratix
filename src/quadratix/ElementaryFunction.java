@@ -5,6 +5,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
+/**
+ * Interface that inherits from `MathFunction<P, P>`. It represents an endomorph function. It also add a static method
+ * to get the identity.
+ * @param <P> Denotes the parameter type of the fitness function, that can be any elements (bits, combination, number,
+ *  *           ...).
+ */
 public interface ElementaryFunction<P> extends MathFunction<P, P> {
 	
 	@NotNull
