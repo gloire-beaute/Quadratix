@@ -32,6 +32,7 @@ public class TaillardReader {
         System.out.print("Processing\n");
 
         while ((line = this.bufferedReader.readLine()) != null) {
+            lineCounter++;
             //Progress bar
             System.out.print("-");
 
