@@ -32,8 +32,6 @@ public class TaillardReader {
         System.out.print("Processing\n");
 
         while ((line = this.bufferedReader.readLine()) != null) {
-            lineCounter++;
-
             //Progress bar
             System.out.print("-");
 
@@ -50,6 +48,7 @@ public class TaillardReader {
                 if (assignementData.getLength() == null)
                     throw new TaillardException("No length found in Taillard file");
 
+                //TODO optimize for loop (starting with lincounter because we transpose left side)
                 for (int i = 0; i < assignementData.getLength(); i++) {
                     int value;
                     try {

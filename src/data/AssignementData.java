@@ -3,7 +3,6 @@ package data;
 import javafx.util.Pair;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class AssignementData {
@@ -18,13 +17,19 @@ public class AssignementData {
     }
 
     public void addWeight(Pair<Integer, Integer> pair, Integer weight){
-        //TODO test conditions
-        this.weights.put(pair,weight);
+        Pair<Integer, Integer> revertedPair = new Pair<>(pair.getValue(),pair.getKey());
+        if(!this.weights.containsKey(pair) && !this.weights.containsKey(revertedPair)){
+            this.weights.put(pair,weight);
+            this.weights.put(revertedPair,weight);
+        }
     }
 
     public void addDistance(Pair<Integer, Integer> pair, Integer distance){
-        //TODO test conditions
-        this.distances.put(pair,distance);
+        Pair<Integer, Integer> revertedPair = new Pair<>(pair.getValue(),pair.getKey());
+        if(!this.distances.containsKey(pair) && !this.distances.containsKey(revertedPair)){
+            this.distances.put(pair,distance);
+            this.distances.put(revertedPair,distance);
+        }
     }
 
     //GETTERS SETTERS
