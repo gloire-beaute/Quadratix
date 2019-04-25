@@ -2,20 +2,41 @@ package quadratix;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
 import java.util.function.Function;
 
+/**
+ * Class that implement the tabu search. The functions `search()` and its overload search the optimal point in the space
+ * of solution.
+ * @param <P> Denotes the parameter type of the fitness function, that can be any elements (bits, combination, number,
+ *           ...).
+ * @param <R> represents the return type of the fitness function. It is often a number (integer or real).
+ */
 public class Tabu<P, R> implements ISearch<P, R> {
 	
+	/**
+	 * The maximum number of iterations allow in the search.
+	 */
 	public static final int MAX_ITERATION = 1000000;
 	
 	@Override
 	public P search(@NotNull Function<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0) {
 		return search(f, x0, V, rOperation, t0, 1);
 	}
+	
+	/**
+	 * Search the optimal point in a space of solutions.
+	 * @param f The fitness function.
+	 * @param x0 The starting point.
+	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
+	 *          -> x'), and the invert function (x' -> x).
+	 * @param rOperation The operations we can apply on `R`.
+	 * @param t0 The starting temperature.
+	 * @param tabuSize The fixed size of the tabu list. By default, the fixed size is 1.
+	 * @return Return the optimal point if found.
+	 */
 	public P search(@NotNull Function<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0, int tabuSize) {
 		TabuList<P, P> T = new TabuList<>(tabuSize);
 		

@@ -13,6 +13,9 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
+/**
+ * Class that represents a combination of number.
+ */
 public class Combination extends Vector<Long> implements Comparable<Combination>, Serializable, Cloneable {
 	
 	public Combination(@NotNull Long... elements) {

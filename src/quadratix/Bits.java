@@ -4,10 +4,13 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.naming.LimitExceededException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Objects;
 
+/**
+ * Class that represents an array of bits.
+ */
 public class Bits extends Number implements Comparable<Bits>, Serializable, Cloneable {
 	
 	private int length;
