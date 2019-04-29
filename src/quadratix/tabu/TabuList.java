@@ -1,6 +1,7 @@
 package quadratix.tabu;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.*;
@@ -72,6 +73,16 @@ public class TabuList<P, R> extends ArrayList<Function<P, R>> implements Seriali
 			return super.add(x);
 	}
 	
+	@NotNull
+	public Function<P, R> getFirst() {
+		return get(0);
+	}
+	
+	@NotNull
+	public Function<P, R> getLast() {
+		return get(size()-1);
+	}
+	
 	/* GETTERS & SETTERS */
 	
 	public int getFixedSize() {
@@ -80,6 +91,11 @@ public class TabuList<P, R> extends ArrayList<Function<P, R>> implements Seriali
 	
 	public void setFixedSize(int fixedSize) {
 		this.fixedSize = fixedSize;
+		
+		// If the size if greater than the new fixed size, remove all elements from index fixed size.
+		if (size() > getFixedSize())
+			for (int i = getFixedSize(); i < size();)
+				remove(i);
 	}
 	
 	/* OVERRIDE */
