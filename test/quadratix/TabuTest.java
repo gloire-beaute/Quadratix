@@ -19,7 +19,7 @@ class TabuTest {
 	
 	@BeforeEach
 	void setup() {
-		V_bits = Bits.generateAllNeighbors(NB_BITS);
+		V_bits = Bits.generateAllNeighbors();
 		intOps = NumberOperations.getIntegerOperations();
 	}
 	

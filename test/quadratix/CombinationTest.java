@@ -5,6 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import quadratix.combination.Combination;
 
+import java.util.ArrayList;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CombinationTest {
@@ -55,5 +59,22 @@ class CombinationTest {
 		assertNotEquals(combination, c);
 		assertEquals(combination.size(), c.size());
 		c.containsAll(combination);
+	}
+	
+	@Test
+	void generateAllPossibility() {
+		ArrayList<Combination> possibilities = Combination.generateAllPossibility(2);
+		System.out.println(possibilities.stream().map(Combination::toString).collect(Collectors.joining("\n")));
+		assertEquals(2, possibilities.size());
+		assertEquals(new Combination(1, 2), possibilities.get(0));
+		assertEquals(new Combination(2, 1), possibilities.get(1));
+		
+		possibilities = Combination.generateAllPossibility(3);
+		System.out.println(possibilities.stream().map(Combination::toString).collect(Collectors.joining("\n")));
+		assertEquals(4, possibilities.size());
+		assertEquals(new Combination(1, 2, 3), possibilities.get(0));
+		assertEquals(new Combination(2, 1, 3), possibilities.get(1));
+		assertEquals(new Combination(3, 2, 1), possibilities.get(2));
+		assertEquals(new Combination(1, 3, 2), possibilities.get(3));
 	}
 }

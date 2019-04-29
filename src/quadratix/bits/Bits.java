@@ -171,6 +171,7 @@ public class Bits extends Number implements Comparable<Bits>, Serializable, Clon
 	}
 	
 	@NotNull
+	@Contract(pure = true)
 	public static ArrayList<Bits> generateAllPossibility(int numberOfBits) {
 		ArrayList<Bits> possibilities = new ArrayList<>();
 		
@@ -192,14 +193,13 @@ public class Bits extends Number implements Comparable<Bits>, Serializable, Clon
 		return possibilities;
 	}
 	
-	public static Function<Bits, HashMap<Bits, ElementaryFunction<Bits>>> generateAllNeighbors(final int length) {
-		if (length <= 0)
-			throw new IllegalArgumentException("Invalid length: " + length);
-		
+	@NotNull
+	@Contract(pure = true)
+	public static Function<Bits, HashMap<Bits, ElementaryFunction<Bits>>> generateAllNeighbors() {
 		return bits -> {
 			HashMap<Bits, ElementaryFunction<Bits>> map = new HashMap<>();
 			
-			for (int i = 0; i < length; i++) {
+			for (int i = 0; i < bits.getLength(); i++) {
 				Bits b = new Bits(bits);
 				b.invertBitFromLeft(i);
 				final int final_i = i;

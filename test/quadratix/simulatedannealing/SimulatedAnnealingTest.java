@@ -9,6 +9,7 @@ import quadratix.bits.Bits;
 import java.util.HashMap;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static quadratix.SearchTestUtil.*;
 
 class SimulatedAnnealingTest {
@@ -20,7 +21,7 @@ class SimulatedAnnealingTest {
 	
 	@BeforeEach
 	void setup() {
-		V_bits = Bits.generateAllNeighbors(NB_BITS);
+		V_bits = Bits.generateAllNeighbors();
 		intOps = NumberOperations.getIntegerOperations();
 	}
 	
@@ -33,5 +34,8 @@ class SimulatedAnnealingTest {
 		Bits b = simulatedAnnealing.search(f, new Bits(0, NB_BITS), V_bits, intOps, 5.0, 100, 100, 0.1);
 		System.out.println("Result: f(" + b + ") = " + f.apply(b));
 		System.out.println("(b = \"" + b.getBits() + "\"<2> = \"" + b.getValue() + "\"<10>)");
+		
+		assertEquals(12, b.intValue());
+		assertEquals(0, f.apply(b));
 	}
 }

@@ -3,11 +3,14 @@ package quadratix.combination;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
+import quadratix.bits.Bits;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -77,6 +80,64 @@ public class Combination extends Vector<Long> implements Comparable<Combination>
 			int j = indexes.get(index);
 			swap(i, j);
 		}
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	public static ArrayList<Combination> generateAllPossibility(final int length) {
+		ArrayList<Combination> possibilities = new ArrayList<>();
+		
+		// Compute the "normal" combination (1, 2, 3, 4, ... n).
+		Combination normal = new Combination(length);
+		for (int i = 0; i < length; i++) {
+			normal.add((long) i+1);
+		}
+		
+		possibilities.add(normal);
+		
+		// Generate all bits
+		for (int i = 0; i <= length-1; i++) {
+			for (int j = i+1; j < length; j++) {
+				Combination c = new Combination(normal);
+				c.swap(i, j);
+				possibilities.add(c);
+			}
+		}
+		
+		return possibilities;
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	public static Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> generateAllNeighbors() {
+		return combination -> {
+			HashMap<Combination, ElementaryFunction<Combination>> map = new HashMap<>();
+			
+			for (int i = 0; i < combination.size()-1; i++) {
+				for (int j = i+1; j < combination.size(); j++) {
+					Combination c = new Combination(combination);
+					c.swap(i, j);
+					final int final_i = i, final_j = j;
+					map.put(c, new ElementaryFunction<Combination>() {
+						@Override
+						public Combination apply(Combination bits) {
+							c.swap(final_i, final_j);
+							return bits;
+						}
+						
+						@Override
+						public @NotNull Function<Combination, Combination> invert() {
+							return bits1 -> {
+								c.swap(final_i, final_j);
+								return bits1;
+							};
+						}
+					});
+				}
+			}
+			
+			return map;
+		};
 	}
 	
 	//region LIST OVERRIDES
