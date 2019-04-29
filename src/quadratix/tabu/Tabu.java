@@ -1,6 +1,9 @@
-package quadratix;
+package quadratix.tabu;
 
 import org.jetbrains.annotations.NotNull;
+import quadratix.ElementaryFunction;
+import quadratix.ISearch;
+import quadratix.NumberOperations;
 
 import java.util.HashMap;
 import java.util.HashSet;

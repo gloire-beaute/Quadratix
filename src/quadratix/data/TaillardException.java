@@ -1,4 +1,4 @@
-package data;
+package quadratix.data;
 
 public class TaillardException extends RuntimeException {
 

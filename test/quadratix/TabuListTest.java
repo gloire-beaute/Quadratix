@@ -2,6 +2,7 @@ package quadratix;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import quadratix.tabu.TabuList;
 
 import java.util.function.Function;
 

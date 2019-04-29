@@ -1,4 +1,4 @@
-package quadratix;
+package quadratix.tabu;
 
 import org.jetbrains.annotations.NotNull;
 

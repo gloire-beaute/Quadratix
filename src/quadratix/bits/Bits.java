@@ -1,8 +1,9 @@
-package quadratix;
+package quadratix.bits;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import quadratix.NumberOperations;
 
 import java.io.Serializable;
 import java.util.ArrayList;

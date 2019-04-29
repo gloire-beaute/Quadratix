@@ -1,9 +1,9 @@
 package quadratix;
 
 import org.junit.jupiter.api.*;
+import quadratix.bits.Bits;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 

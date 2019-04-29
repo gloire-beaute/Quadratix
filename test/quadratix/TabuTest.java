@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import quadratix.bits.Bits;
+import quadratix.tabu.Tabu;
 
 import java.util.HashMap;
 import java.util.function.Function;

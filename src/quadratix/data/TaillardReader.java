@@ -1,13 +1,12 @@
-package data;
+package quadratix.data;
 
 import javafx.util.Pair;
 
 import java.io.*;
-import java.util.Arrays;
 
 public class TaillardReader {
 
-    private static String TAILLARD_PATH = "./resources";
+    private static final String TAILLARD_PATH = "./res/taillard";
     private File file;
     private BufferedReader bufferedReader;
 
@@ -18,9 +17,9 @@ public class TaillardReader {
     }
 
     /**
-     * Extract assignement data from taillard instances
+     * Extract assignement quadratix.data from taillard instances
      *
-     * @return AssignementData object with taillard's given data
+     * @return AssignementData object with taillard's given quadratix.data
      * @throws IOException
      */
     public AssignementData createAssignementData() throws IOException {

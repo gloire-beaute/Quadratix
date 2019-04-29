@@ -1,4 +1,4 @@
-package data;
+package quadratix.data;
 
 import javafx.util.Pair;
 

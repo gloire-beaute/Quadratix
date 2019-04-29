@@ -1,16 +1,13 @@
-package quadratix;
+package quadratix.combination;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import quadratix.NumberOperations;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.IntToLongFunction;
-import java.util.function.IntUnaryOperator;
-import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
 /**
