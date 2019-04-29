@@ -3,11 +3,14 @@ package quadratix.bits;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Class that represents an array of bits.
@@ -187,6 +190,38 @@ public class Bits extends Number implements Comparable<Bits>, Serializable, Clon
 			possibilities.add(new Bits(i, numberOfBits));
 		
 		return possibilities;
+	}
+	
+	public static Function<Bits, HashMap<Bits, ElementaryFunction<Bits>>> generateAllNeighbors(final int length) {
+		if (length <= 0)
+			throw new IllegalArgumentException("Invalid length: " + length);
+		
+		return bits -> {
+			HashMap<Bits, ElementaryFunction<Bits>> map = new HashMap<>();
+			
+			for (int i = 0; i < length; i++) {
+				Bits b = new Bits(bits);
+				b.invertBitFromLeft(i);
+				final int final_i = i;
+				map.put(b, new ElementaryFunction<Bits>() {
+					@Override
+					public Bits apply(Bits bits) {
+						bits.invertBitFromLeft(final_i);
+						return bits;
+					}
+					
+					@Override
+					public @NotNull Function<Bits, Bits> invert() {
+						return bits1 -> {
+							bits1.invertBitFromLeft(final_i);
+							return bits1;
+						};
+					}
+				});
+			}
+			
+			return map;
+		};
 	}
 	
 	/* NUMBER OVERRIDES */

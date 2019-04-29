@@ -20,70 +20,10 @@ class TabuTest {
 	NumberOperations<Integer> intOps;
 	
 	@BeforeEach
-	void setUp() {
-		V_bits = bits -> {
-			HashMap<Bits, ElementaryFunction<Bits>> map = new HashMap<>();
-			
-			for (int i = 0; i < NB_BITS; i++) {
-				Bits b = new Bits(bits);
-				b.invertBitFromLeft(i);
-				final int final_i = i;
-				map.put(b, new ElementaryFunction<Bits>() {
-					@Override
-					public Bits apply(Bits bits) {
-						bits.invertBitFromLeft(final_i);
-						return bits;
-					}
-					
-					@Override
-					public @NotNull Function<Bits, Bits> invert() {
-						return bits1 -> {
-							bits1.invertBitFromLeft(final_i);
-							return bits1;
-						};
-					}
-				});
-			}
-			
-			return map;
-		};
+	void setup() {
+		V_bits = Bits.generateAllNeighbors(NB_BITS);
 		
-		intOps = new NumberOperations<Integer>() {
-			@Nullable
-			@Override
-			public Integer plus(@Nullable Integer t1, @Nullable Integer t2) {
-				return t1 + t2;
-			}
-			
-			@Nullable
-			@Override
-			public Integer minus(@Nullable Integer t1, @Nullable Integer t2) {
-				return t1 - t2;
-			}
-			
-			@Nullable
-			@Override
-			public Integer multiply(@Nullable Integer t1, @Nullable Integer t2) {
-				return t1 * t2;
-			}
-			
-			@Nullable
-			@Override
-			public Integer divide(@Nullable Integer t1, @Nullable Integer t2) {
-				return t1 / t2;
-			}
-			
-			@Nullable
-			@Override
-			public Integer getZero() {
-				return 0;
-			}
-			
-			@Override
-			public int compare(Integer o1, Integer o2) {
-				return o1.compareTo(o2);
-			}
-		};
+		intOps = NumberOperations.getIntegerOperations();
 	}
 	
 	@Test
