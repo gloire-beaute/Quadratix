@@ -3,7 +3,6 @@ package data;
 import javafx.util.Pair;
 
 import java.io.*;
-import java.util.Arrays;
 
 public class TaillardReader {
 

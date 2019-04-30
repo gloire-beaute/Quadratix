@@ -1,6 +1,7 @@
 package data;
 
 import javafx.util.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -8,7 +9,17 @@ import java.util.stream.Collectors;
 public class AssignementData {
 
     private Integer length;
+
+    /**
+     * 1.....n objects with weight between each others
+     */
+    @NotNull
     private HashMap<Pair<Integer, Integer>, Integer> weights;
+
+    /**
+     *  1.....n places with distances between each others
+     */
+    @NotNull
     private HashMap<Pair<Integer, Integer>, Integer> distances;
 
     AssignementData() {
