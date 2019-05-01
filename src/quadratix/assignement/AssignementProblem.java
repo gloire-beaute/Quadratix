@@ -59,6 +59,10 @@ public class AssignementProblem {
         return f;
     }
 
+    public Combination getOutCombination() {
+        return outCombination;
+    }
+
     public void tabuAlgortihm() {
         tabu = new Tabu<>();
 
