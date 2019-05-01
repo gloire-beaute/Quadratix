@@ -1,4 +1,4 @@
-package quadratix;
+package quadratix.bits;
 
 public class BitLengthExceededException extends RuntimeException {
 	

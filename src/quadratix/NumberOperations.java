@@ -4,6 +4,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 
+/**
+ * Interface that implements methods to use an object as a number, with different operations
+ * @param <T> Represents the type of the number-like object.
+ */
 public interface NumberOperations<T> extends Comparator<T> {
 	
 	@Nullable

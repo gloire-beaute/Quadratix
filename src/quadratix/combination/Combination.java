@@ -1,33 +1,33 @@
-package quadratix;
+package quadratix.combination;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import quadratix.NumberOperations;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.IntToLongFunction;
-import java.util.function.IntUnaryOperator;
-import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
+/**
+ * Class that represents a combination of number.
+ */
 public class Combination extends Vector<Long> implements Comparable<Combination>, Serializable, Cloneable {
 	
 	public Combination(@NotNull Long... elements) {
-		super();
+		super(elements.length);
 		this.addAll(Arrays.asList(elements));
 	}
 	public Combination(@NotNull Integer... elements) {
-		super();
+		super(elements.length);
 		this.addAll(Arrays.stream(elements).map(Long::new).collect(Collectors.toList()));
 	}
 	public Combination(int length) {
 		super(length);
 	}
 	public Combination() {
-		super();
+		super(0);
 	}
 	public Combination(@NotNull Collection<? extends Long> collection) {
 		super(collection);
