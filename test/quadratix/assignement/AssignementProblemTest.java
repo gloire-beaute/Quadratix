@@ -18,7 +18,14 @@ class AssignementProblemTest {
     void setUp(){
 
         try {
-            assignementProblem.taillardInitializer("tai12a.txt");
+            assignementProblem.taillardInitializer("tai30.txt");
+            System.out.println(assignementProblem.getAssignementData().toString());
+
+            Combination initialComb = new Combination();
+            for (int i = 0; i < assignementProblem.getAssignementData().getLength(); i++) {
+                initialComb.add((long) i+1);
+            }
+            assignementProblem.setInCombination(initialComb);
         } catch (IOException e) {
             e.printStackTrace();
         }
