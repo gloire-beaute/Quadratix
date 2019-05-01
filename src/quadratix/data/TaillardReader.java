@@ -27,7 +27,7 @@ public class TaillardReader {
 
         String line;
         int spaceCounter = 0;
-        int lineCounter = 0;
+        int lineCounter = 1;
         System.out.print("Processing\n");
 
         while ((line = this.bufferedReader.readLine()) != null) {
@@ -46,7 +46,7 @@ public class TaillardReader {
                 assignementData.setLength(length);
             } else if (lineContent.length > 1) {
                 if (assignementData.getLength() == null)
-                    throw new TaillardException("No length found in Taillard file");
+                    throw new AssignementDataException("No length found in Taillard file");
 
                 //TODO optimize for loop (starting with lincounter because we transpose left side)
                 for (int i = 0; i < assignementData.getLength(); i++) {
@@ -54,13 +54,13 @@ public class TaillardReader {
                     try {
                         value = Integer.parseInt(lineContent[i]);
                     } catch (ArrayIndexOutOfBoundsException ex) {
-                        throw new TaillardException("Number of arguments exceed length");
+                        throw new AssignementDataException("Number of arguments exceed length");
                     }
 
                     if (spaceCounter == 1) {
-                        assignementData.addWeight(new Pair<>(lineCounter, i), value);
+                        assignementData.addWeight(new Pair<Long, Long>((long) lineCounter, (long) i), (long) value);
                     } else {
-                        assignementData.addDistance(new Pair<>(lineCounter, i), value);
+                        assignementData.addDistance(new Pair<Long, Long>((long) lineCounter, (long) i), (long) value);
                     }
                 }
             } else {
@@ -73,13 +73,13 @@ public class TaillardReader {
 
         //CHECK DATA
         if (assignementData.getDistances().isEmpty())
-            throw new TaillardException("Taillard's distances must be informed");
+            throw new AssignementDataException("Taillard's distances must be informed");
 
         if (assignementData.getWeights().isEmpty())
-            throw new TaillardException("Taillard's weights must be informed");
+            throw new AssignementDataException("Taillard's weights must be informed");
 
         if (assignementData.getDistances().size() != assignementData.getWeights().size())
-            throw new TaillardException("Taillard's distances vector and weights vector must have same length");
+            throw new AssignementDataException("Taillard's distances vector and weights vector must have same length");
 
         return assignementData;
     }
