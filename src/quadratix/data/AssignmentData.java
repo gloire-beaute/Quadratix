@@ -6,21 +6,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class AssignementData {
+public class AssignmentData {
 
     private Integer length;
     private HashMap<Pair<Long, Long>, Long> weights;
     private HashMap<Pair<Long, Long>, Long> distances;
 
-    public AssignementData() {
+    public AssignmentData() {
         this.weights = new HashMap<>();
         this.distances = new HashMap<>();
     }
 
-    public AssignementData(@NotNull int length, @NotNull HashMap<Pair<Long, Long>, Long> weights,
-                           @NotNull HashMap<Pair<Long, Long>, Long> distances) {
+    public AssignmentData(@NotNull int length, @NotNull HashMap<Pair<Long, Long>, Long> weights,
+                          @NotNull HashMap<Pair<Long, Long>, Long> distances) {
         if(weights.size() != distances.size())
-            throw new AssignementDataException("Weights and distances must have same size");
+            throw new AssignmentDataException("Weights and distances must have same size");
         this.length = length;
 
         this.weights = new HashMap<>();
@@ -107,4 +107,3 @@ public class AssignementData {
                 this.distanceToString();
     }
 }
-

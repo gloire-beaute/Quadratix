@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
 import quadratix.combination.Combination;
-import quadratix.data.AssignementData;
+import quadratix.data.AssignmentData;
 import quadratix.data.TaillardReader;
 import quadratix.tabu.Tabu;
 
@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 public class AssignementProblem {
 
-    private AssignementData assignementData = new AssignementData();
+    private AssignmentData assignmentData = new AssignmentData();
     private Combination inCombination = new Combination();
     private Combination outCombination = new Combination();
 
@@ -37,18 +37,18 @@ public class AssignementProblem {
 
     public void taillardInitializer(@NotNull String filename) throws IOException {
         TaillardReader taillardReader = new TaillardReader(filename);
-        this.assignementData = taillardReader.createAssignementData();
+        this.assignmentData = taillardReader.createAssignementData();
         this.setup();
     }
 
     public void customInitializer(@NotNull int length, @NotNull HashMap<Pair<Long, Long>, Long> weights,
                                   @NotNull HashMap<Pair<Long, Long>, Long> distance) {
-        this.assignementData = new AssignementData(length, weights, distance);
+        this.assignmentData = new AssignmentData(length, weights, distance);
         this.setup();
     }
 
-    public AssignementData getAssignementData() {
-        return assignementData;
+    public AssignmentData getAssignmentData() {
+        return assignmentData;
     }
 
     public void setInCombination(Combination inCombination) {
@@ -69,10 +69,10 @@ public class AssignementProblem {
     private void setFitnessFunction() {
         f = Combination -> {
             int result = 0;
-            for (int i = 1; i <= assignementData.getLength(); i++) {
-                for (int j = i + 1; j <= assignementData.getLength(); j++) {
-                    result += assignementData.getWeights().get(new Pair<>(Combination.get(i-1), Combination.get(j-1)))
-                            *assignementData.getDistances().get(new Pair<>((long) i, (long) j));
+            for (int i = 1; i <= assignmentData.getLength(); i++) {
+                for (int j = i + 1; j <= assignmentData.getLength(); j++) {
+                    result += assignmentData.getWeights().get(new Pair<>(Combination.get(i-1), Combination.get(j-1)))
+                            * assignmentData.getDistances().get(new Pair<>((long) i, (long) j));
                 }
             }
             return result;
@@ -83,8 +83,8 @@ public class AssignementProblem {
         V_combination = combination -> {
             HashMap<Combination, ElementaryFunction<Combination>> map = new HashMap<>();
 
-            for (int i = 0; i < assignementData.getLength(); i++) {
-                for (int j = i+1; j < assignementData.getLength(); j++) {
+            for (int i = 0; i < assignmentData.getLength(); i++) {
+                for (int j = i+1; j < assignmentData.getLength(); j++) {
                     Combination c = new Combination(combination);
                     c.swap(i, j);
                     final int final_i = i;

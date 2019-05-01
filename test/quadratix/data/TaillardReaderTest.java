@@ -9,9 +9,9 @@ class TaillardReaderTest {
     @Test
     void createAssignementData() {
         try {
-            TaillardReader taillardReader = new TaillardReader("tai12a.txt");
-            AssignementData assignementData = taillardReader.createAssignementData();
-            System.out.println(assignementData.toString());
+            TaillardReader taillardReader = new TaillardReader("tai12.txt");
+            AssignmentData assignmentData = taillardReader.createAssignementData();
+            System.out.println(assignmentData.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
