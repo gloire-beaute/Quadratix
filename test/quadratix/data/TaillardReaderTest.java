@@ -10,8 +10,8 @@ class TaillardReaderTest {
     void createAssignementData() {
         try {
             TaillardReader taillardReader = new TaillardReader("tai12.txt");
-            AssignementData assignementData = taillardReader.createAssignementData();
-            System.out.println(assignementData.toString());
+            AssignmentData assignmentData = taillardReader.createAssignementData();
+            System.out.println(assignmentData.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,14 +1,10 @@
 package quadratix.assignement;
 
-import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import quadratix.combination.Combination;
 
 import java.io.IOException;
-import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AssignementProblemTest {
 
@@ -19,10 +15,10 @@ class AssignementProblemTest {
 
         try {
             assignementProblem.taillardInitializer("tai30.txt");
-            System.out.println(assignementProblem.getAssignementData().toString());
+            System.out.println(assignementProblem.getAssignmentData().toString());
 
             Combination initialComb = new Combination();
-            for (int i = 0; i < assignementProblem.getAssignementData().getLength(); i++) {
+            for (int i = 0; i < assignementProblem.getAssignmentData().getLength(); i++) {
                 initialComb.add((long) i+1);
             }
             assignementProblem.setInCombination(initialComb);
@@ -68,10 +64,10 @@ class AssignementProblemTest {
         int fitness = assignementProblem.getF().apply(new Combination(1,3,4,5,2));
         assertEquals(78, fitness);*/
 
-        System.out.println(assignementProblem.getAssignementData().toString());
+        System.out.println(assignementProblem.getAssignmentData().toString());
 
         Combination initialComb = new Combination();
-        for (int i = 0; i < assignementProblem.getAssignementData().getLength(); i++) {
+        for (int i = 0; i < assignementProblem.getAssignmentData().getLength(); i++) {
             initialComb.add((long) i+1);
         }
         assignementProblem.setInCombination(/*new Combination(1,3,4,5,2)*/ initialComb);
