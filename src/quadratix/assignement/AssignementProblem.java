@@ -5,14 +5,18 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
+import quadratix.bits.Bits;
 import quadratix.combination.Combination;
 import quadratix.data.AssignmentData;
 import quadratix.data.TaillardReader;
+import quadratix.simulatedannealing.SimulatedAnnealing;
 import quadratix.tabu.Tabu;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AssignementProblem {
 
@@ -21,6 +25,7 @@ public class AssignementProblem {
     private Combination outCombination = new Combination();
 
     private Tabu<Combination, Integer> tabu;
+    private  SimulatedAnnealing<Combination, Integer> simulatedAnnealing;
     private Function<Combination, Integer> f; //fitness
     private Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> V_combination;
     private NumberOperations<Integer> intOps;
@@ -63,6 +68,13 @@ public class AssignementProblem {
         tabu = new Tabu<>();
 
         outCombination = tabu.search(f, inCombination, V_combination, intOps, 5.0, 3);
+        System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
+    }
+
+    public void recuitAlgortihm() {
+        simulatedAnnealing = new SimulatedAnnealing<>();
+
+        outCombination = simulatedAnnealing.search(f, inCombination, V_combination, intOps, 5.0, 100, 100, 0.1);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
     }
 

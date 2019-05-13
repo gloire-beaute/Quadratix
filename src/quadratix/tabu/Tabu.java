@@ -58,7 +58,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 			C.clear();
 			C.addAll(elemFuns.keySet());
 			// At this point, C = V(xi).
-			System.out.println("Number of neighbors : " + C.size());
+//			System.out.println("Number of neighbors : " + C.size());
 			// Now, {m(xi) | m∈T} must be removed from it.
 			for (Function<P, P> m : T)
 				C.remove(m.apply(xi.lastElement()));
