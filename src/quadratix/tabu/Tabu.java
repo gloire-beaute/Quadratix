@@ -23,6 +23,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * The maximum number of iterations allow in the search.
 	 */
 	public static final int MAX_ITERATION = 1000000;
+	public int fitnessCall = 0;
 	
 	@Override
 	public P search(@NotNull Function<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0) {
@@ -51,6 +52,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 		Vector<P> xi = new Vector<>();
 		xi.add(x0);
 		R fmin = f.apply(xmin);
+		fitnessCall++;
 		int i = 0;
 		
 		do {
@@ -75,6 +77,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				ElementaryFunction<P> m = elemFuns.getOrDefault(y, ElementaryFunction.identity());
 				
 				for (P z : C) {
+					fitnessCall = fitnessCall + 2;
 					if (rOperation.compare(f.apply(z), f.apply(y)) < 0) {
 						y = z;
 						m = elemFuns.getOrDefault(y, m);
@@ -85,6 +88,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				
 				// Compute f(y) and save the result in `fy`
 				R fy = f.apply(y);
+				fitnessCall++;
 				
 				// Compute the fitness variation
 				R deltaF = rOperation.minus(fy, f.apply(xi.lastElement()));
@@ -119,5 +123,9 @@ public class Tabu<P, R> implements ISearch<P, R> {
 			System.out.println("C = " + C.toString());
 		
 		return xmin;
+	}
+
+	public int getFitnessCall() {
+		return fitnessCall;
 	}
 }

@@ -69,6 +69,7 @@ public class AssignementProblem {
 
         outCombination = tabu.search(f, inCombination, V_combination, intOps, 5.0, 3);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
+        System.out.println("Fitness call: " + tabu.getFitnessCall());
     }
 
     public void recuitAlgortihm() {
@@ -76,6 +77,7 @@ public class AssignementProblem {
 
         outCombination = simulatedAnnealing.search(f, inCombination, V_combination, intOps, 5.0, 100, 100, 0.1);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
+//        System.out.println("Fitness call: " + simulatedAnnealing.getFitnessCall());
     }
 
     private void setFitnessFunction() {
