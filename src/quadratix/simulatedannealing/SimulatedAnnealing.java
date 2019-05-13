@@ -30,23 +30,23 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	
 	@Nullable
 	@Override
-	public P search(@NotNull Function<P, R> f,
-	                P x0,
-	                @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V,
-	                @NotNull NumberOperations<R> rOperation,
-	                double t0) {
+	public P search(@NotNull final Function<P, R> f,
+	                final P x0,
+	                @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V,
+	                @NotNull final NumberOperations<R> rOperation,
+	                final double t0) {
 		return search(f, x0, V, rOperation, t0, getN1(), getN2(), getMu());
 	}
 	
 	@Nullable
-	public P search(@NotNull Function<P, R> f,
-	                P x0,
-	                @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V,
-	                @NotNull NumberOperations<R> rOperation,
-	                double t0,
-	                int n1,
-	                int n2,
-	                double mu) {
+	public P search(final @NotNull Function<P, R> f,
+	                final P x0,
+	                @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V,
+	                @NotNull final NumberOperations<R> rOperation,
+	                final double t0,
+	                final int n1,
+	                final int n2,
+	                final double mu) {
 		P xmin = x0;
 		P xi = x0;
 		double tk = t0;
@@ -109,7 +109,6 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	public void setMu(double mu) {
 		this.mu = mu;
 	}
-	
 	
 	//endregion GETTERS & SETTERS
 }

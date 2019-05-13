@@ -23,10 +23,24 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * The maximum number of iterations allow in the search.
 	 */
 	public static final int MAX_ITERATION = 1000000;
-	public int fitnessCall = 0;
+	public int fitnessCall;
 	
+	public Tabu() {
+		setFitnessCall(0);
+	}
+	
+	/**
+	 * Search the optimal point in a space of solutions.
+	 * @param f The fitness function.
+	 * @param x0 The starting point.
+	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
+	 *          -> x'), and the invert function (x' -> x).
+	 * @param rOperation The operations we can apply on `R`.
+	 * @param t0 The starting temperature.
+	 * @return Return the optimal point if found.
+	 */
 	@Override
-	public P search(@NotNull Function<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0) {
+	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final double t0) {
 		return search(f, x0, V, rOperation, t0, 1);
 	}
 	
@@ -41,7 +55,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @param tabuSize The fixed size of the tabu list. By default, the fixed size is 1.
 	 * @return Return the optimal point if found.
 	 */
-	public P search(@NotNull Function<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0, int tabuSize) {
+	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final double t0, final int tabuSize) {
 		TabuList<P, P> T = new TabuList<>(tabuSize);
 		
 		/**
@@ -49,21 +63,21 @@ public class Tabu<P, R> implements ISearch<P, R> {
 		 */
 		HashSet<P> C = new HashSet<>();
 		P xmin = x0;
-		Vector<P> xi = new Vector<>();
-		xi.add(x0);
+		Vector<P> x = new Vector<>();
+		x.add(x0);
 		R fmin = f.apply(xmin);
 		fitnessCall++;
 		int i = 0;
 		
 		do {
-			HashMap<P, ElementaryFunction<P>> elemFuns = V.apply(xi.lastElement());
+			HashMap<P, ElementaryFunction<P>> elemFuns = V.apply(x.get(i));
 			C.clear();
 			C.addAll(elemFuns.keySet());
 			// At this point, C = V(xi).
-//			System.out.println("Number of neighbors : " + C.size());
+			//System.out.println("Number of neighbors : " + C.size());
 			// Now, {m(xi) | m∈T} must be removed from it.
 			for (Function<P, P> m : T)
-				C.remove(m.apply(xi.lastElement()));
+				C.remove(m.apply(x.get(i)));
 			
 			if (!C.isEmpty()) {
 				/* Choose y in C s.t. f(y) = min({f(z) | z in C}) */
@@ -91,7 +105,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				fitnessCall++;
 				
 				// Compute the fitness variation
-				R deltaF = rOperation.minus(fy, f.apply(xi.lastElement()));
+				R deltaF = rOperation.minus(fy, f.apply(x.get(i)));
 				
 				if (rOperation.compare(deltaF, rOperation.getZero()) <= 0) {
 					// Put m^-1 in T
@@ -103,9 +117,9 @@ public class Tabu<P, R> implements ISearch<P, R> {
 					xmin = y;
 				}
 
-				if(xi.contains(y)) //come back to choosen solution
+				if(x.contains(y)) //come back to chosen solution
 					break;
-				xi.add(y);
+				x.add(y);
 			}
 			
 			i++;
@@ -125,7 +139,15 @@ public class Tabu<P, R> implements ISearch<P, R> {
 		return xmin;
 	}
 
+	//region GETTER & SETTER
+	
 	public int getFitnessCall() {
 		return fitnessCall;
 	}
+	
+	private void setFitnessCall(int fitnessCall) {
+		this.fitnessCall = fitnessCall;
+	}
+	
+	//endregion
 }

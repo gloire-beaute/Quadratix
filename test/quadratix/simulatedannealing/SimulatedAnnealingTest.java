@@ -26,7 +26,7 @@ class SimulatedAnnealingTest {
 	}
 	
 	@Test
-	void search() {
+	void slideExercise() {
 		simulatedAnnealing = new SimulatedAnnealing<>();
 		
 		f = getSlideExerciseFitness();
