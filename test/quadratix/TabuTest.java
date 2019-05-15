@@ -77,7 +77,7 @@ class TabuTest {
 		
 		f = getSlideExerciseFitness();
 		
-		Bits b = tabu.search(f, new Bits(0, NB_BITS), V_bits, intOps, 5.0, 100);
+		Bits b = tabu.search(f, new Bits(0, NB_BITS), V_bits, intOps, 5.0, 3);
 		System.out.println("Result: f(" + b + ") = " + f.apply(b));
 		System.out.println("        =>" + b.getValue() + " in decimal");
 		
