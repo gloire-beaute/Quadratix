@@ -25,5 +25,5 @@ public interface ISearch<P, R> {
 	 * @return Return the optimal point if found.
 	 */
 	@Nullable
-	P search(@NotNull Function<P, R> f, P x0, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, double t0);
+	P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final double t0);
 }

@@ -1,15 +1,16 @@
 package quadratix;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import quadratix.bits.Bits;
 import quadratix.tabu.Tabu;
 
 import java.util.HashMap;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static quadratix.SearchTestUtil.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TabuTest {
 	
 	Tabu<Bits, Integer> tabu;
@@ -24,6 +25,7 @@ class TabuTest {
 	}
 	
 	@Test
+	@Order(1)
 	void listNeighbors() {
 		System.out.println("All neighbors in V_bits:");
 		for (Bits b : Bits.generateAllPossibility(NB_BITS)) {
@@ -36,20 +38,7 @@ class TabuTest {
 	}
 	
 	@Test
-	void slideExercise() {
-		tabu = new Tabu<>();
-		
-		f = getSlideExerciseFitness();
-		
-		Bits b = tabu.search(f, new Bits(0, NB_BITS), V_bits, intOps, 5.0, 3);
-		System.out.println("Result: f(" + b + ") = " + f.apply(b));
-		System.out.println("(b = \"" + b.getBits() + "\"<2> = \"" + b.getValue() + "\"<10>)");
-		
-		/*assertEquals("1100", b.getBits());
-		assertEquals(0, f.apply(b));*/
-	}
-	
-	@Test
+	@Order(2)
 	void classExercise() {
 		tabu = new Tabu<>();
 		
@@ -78,6 +67,21 @@ class TabuTest {
 		
 		Bits b = tabu.search(f, new Bits(15, NB_BITS), V_bits, intOps, 0.5, 1);
 		System.out.println("Result: f(" + b + ") = " + f.apply(b));
-		System.out.println("(b = \"" + b.getBits() + "\"<2> = \"" + b.getValue() + "\"<10>)");
+		System.out.println("        =>" + b.getValue() + " in decimal");
+	}
+	
+	@Test
+	@Order(3)
+	void slideExercise() {
+		tabu = new Tabu<>();
+		
+		f = getSlideExerciseFitness();
+		
+		Bits b = tabu.search(f, new Bits(0, NB_BITS), V_bits, intOps, 5.0, 3);
+		System.out.println("Result: f(" + b + ") = " + f.apply(b));
+		System.out.println("        =>" + b.getValue() + " in decimal");
+		
+		assertEquals("1100", b.getBits());
+		assertEquals(0, f.apply(b));
 	}
 }

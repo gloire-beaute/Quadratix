@@ -1,7 +1,6 @@
 package quadratix.simulatedannealing;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
 import quadratix.bits.Bits;
@@ -12,6 +11,7 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static quadratix.SearchTestUtil.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SimulatedAnnealingTest {
 	
 	SimulatedAnnealing<Bits, Integer> simulatedAnnealing;
@@ -26,14 +26,15 @@ class SimulatedAnnealingTest {
 	}
 	
 	@Test
-	void search() {
+	@Order(1)
+	void slideExercise() {
 		simulatedAnnealing = new SimulatedAnnealing<>();
 		
 		f = getSlideExerciseFitness();
 		
 		Bits b = simulatedAnnealing.search(f, new Bits(0, NB_BITS), V_bits, intOps, 5.0, 100, 100, 0.1);
 		System.out.println("Result: f(" + b + ") = " + f.apply(b));
-		System.out.println("(b = \"" + b.getBits() + "\"<2> = \"" + b.getValue() + "\"<10>)");
+		System.out.println("        =>" + b.getValue() + " in decimal");
 		
 		assertEquals(12, b.intValue());
 		assertEquals(0, f.apply(b));

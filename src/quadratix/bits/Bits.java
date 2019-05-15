@@ -205,16 +205,18 @@ public class Bits extends Number implements Comparable<Bits>, Serializable, Clon
 				final int final_i = i;
 				map.put(b, new ElementaryFunction<Bits>() {
 					@Override
-					public Bits apply(Bits bits) {
-						bits.invertBitFromLeft(final_i);
-						return bits;
+					public Bits apply(final Bits bits) {
+						Bits b = new Bits(bits);
+						b.invertBitFromLeft(final_i);
+						return b;
 					}
 					
 					@Override
 					public @NotNull Function<Bits, Bits> invert() {
-						return bits1 -> {
-							bits1.invertBitFromLeft(final_i);
-							return bits1;
+						return (final Bits bits1) -> {
+							Bits b1 = new Bits(bits1);
+							b1.invertBitFromLeft(final_i);
+							return b1;
 						};
 					}
 				});
