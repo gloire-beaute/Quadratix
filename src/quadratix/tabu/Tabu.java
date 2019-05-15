@@ -22,7 +22,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	/**
 	 * The maximum number of iterations allow in the search.
 	 */
-	public static final int MAX_ITERATION = 1000000;
+	public static final int MAX_ITERATION = 1000;
 	public int fitnessCall;
 	
 	public Tabu() {
@@ -80,49 +80,56 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				C.remove(m.apply(x.get(i)));
 			
 			if (!C.isEmpty()) {
-				/* Choose y in C s.t. f(y) = min({f(z) | z in C}) */
+				/* Choose y in C s.t. f(y) = min({f(z) | z∈C}) */
 				
 				// Take the first element in C
 				P y = C.iterator().next();
-				if (i < 10)// TODO: DEBUG
-					System.out.println("y0 = " + y);
 				
 				// The default `m` is identity
-				ElementaryFunction<P> m = elemFuns.getOrDefault(y, ElementaryFunction.identity());
+				ElementaryFunction<P> m = elemFuns.get(y)/*getOrDefault(y, ElementaryFunction.identity())*/;
 				
-				for (P z : C) {
-					fitnessCall = fitnessCall + 2;
-					if (rOperation.compare(f.apply(z), f.apply(y)) < 0) {
-						y = z;
-						m = elemFuns.getOrDefault(y, m);
-					}
-				}
-				if (i < 10)// TODO: DEBUG
-					System.out.println("ymin = " + y);
-				
-				// Compute f(y) and save the result in `fy`
+				// Store the value of f(y) in order to minimize fitness call.
 				R fy = f.apply(y);
 				fitnessCall++;
 				
-				// Compute the fitness variation
+				for (P z : C) {
+					fitnessCall++;
+					if (rOperation.compare(f.apply(z), fy) < 0) {
+						y = z;
+						// Recompute f(y) as `y` changed
+						fy = f.apply(y);
+						fitnessCall++;
+						// TODO: Use `getOrDefault` when the debugging is done. The default value should be `m`.
+						m = elemFuns.get(y);
+					}
+				}
+				
+				// Compute the fitness variation (f.apply(x.get(i)) == fmin?)
 				R deltaF = rOperation.minus(fy, f.apply(x.get(i)));
 				
-				if (rOperation.compare(deltaF, rOperation.getZero()) <= 0) {
+				if (rOperation.compare(deltaF, rOperation.getZero()) >= 0) {// TODO: Is it <= or >= ? According to the two PDF in claco and Spiral, it should be >=
+					// BUG DETECTED: When `>=` is used, TabuTest::slideExercise never finish, and loop indefinitely...
 					// Put m^-1 in T
 					if (m != null)
 						T.add(m.invert());
 				}
-				if (rOperation.compare(fy, fmin) < 0) {
+				if (rOperation.compare(fy, fmin) < 0) {//else
 					fmin = fy;
 					xmin = y;
 				}
 
 				if(x.contains(y)) //come back to chosen solution
 					break;
+				
+				if (x0.getClass().isAssignableFrom(quadratix.bits.Bits.class) && fmin.getClass().isAssignableFrom(java.lang.Integer.class))
+					System.out.println(String.format("Iteration %4d: xi=%s; xmin=%s; fmin=%2d", i, x.get(i), xmin, fmin));
+				
+				// xi becomes y
 				x.add(y);
+				
+				// Increment the number of iteration
+				i++;
 			}
-			
-			i++;
 		} while (i < MAX_ITERATION && !C.isEmpty());
 		
 		// TODO: DEBUG
