@@ -4,6 +4,7 @@ import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import quadratix.combination.Combination;
+import quadratix.stats.Stopwatch;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -97,15 +98,17 @@ class AssignementProblemTest {
     @Test
     void algorithms(){
         System.out.println("TABU algorithm");
-        long debut = System.nanoTime();
+        Stopwatch stopwatch = new Stopwatch(true);
         assignementProblem.tabuAlgortihm();
-        System.out.println("Execution time : " + (System.nanoTime() - debut)/1000 + " microsec");
+        stopwatch.stop();
+        System.out.println("Execution time : " + stopwatch.elapsedMs() + " microsec");
         System.out.println("\n");
 
         System.out.println("RECUIT algorithm");
-        debut = System.nanoTime();
+        stopwatch = new Stopwatch(true);
         assignementProblem.recuitAlgortihm();
-        System.out.println("Execution time : " + (System.nanoTime() - debut)/1000 + " microsec");
+        stopwatch.stop();
+        System.out.println("Execution time : " + stopwatch.elapsedMs() + " microsec");
         System.out.println("\n");
     }
 
