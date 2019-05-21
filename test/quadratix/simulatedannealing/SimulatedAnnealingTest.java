@@ -1,5 +1,6 @@
 package quadratix.simulatedannealing;
 
+import javafx.util.Pair;
 import org.junit.jupiter.api.*;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
@@ -38,5 +39,21 @@ class SimulatedAnnealingTest {
 		
 		assertEquals(12, b.intValue());
 		assertEquals(0, f.apply(b));
+	}
+	
+	@Test
+	@Order(2)
+	void tdExercise() {
+		SimulatedAnnealing<Pair<Integer, Integer>, Double> simulatedAnnealing = new SimulatedAnnealing<>();
+		
+		Function<Pair<Integer, Integer>, Double> f = getTDExerciseFitness();
+		Function<Pair<Integer, Integer>, HashMap<Pair<Integer, Integer>, ElementaryFunction<Pair<Integer, Integer>>>> V = getTDExerciseV();
+		
+		Pair<Integer, Integer> pair = simulatedAnnealing.search(f, new Pair<>(1, 1), V, NumberOperations.getDoubleOperations(), 5.0, 100, 100, 0.1);
+		System.out.println("Result: f((" + pair.getKey() + " ; " + pair.getValue() + ")) = " + f.apply(pair));
+		
+		assertEquals(4, pair.getKey());
+		assertEquals(4, pair.getValue());
+		assertEquals(-20, f.apply(pair));
 	}
 }

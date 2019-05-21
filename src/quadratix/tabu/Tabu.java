@@ -42,12 +42,11 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
 	 *          -> x'), and the invert function (x' -> x).
 	 * @param rOperation The operations we can apply on `R`.
-	 * @param t0 The starting temperature.
 	 * @return Return the optimal point if found.
 	 */
 	@Override
-	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final double t0) {
-		return search(f, x0, V, rOperation, t0, getTabuSize(), DEFAULT_MAX_ITERATION);
+	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation) {
+		return search(f, x0, V, rOperation, getTabuSize(), DEFAULT_MAX_ITERATION);
 	}
 	
 	/**
@@ -57,12 +56,11 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
 	 *          -> x'), and the invert function (x' -> x).
 	 * @param rOperation The operations we can apply on `R`.
-	 * @param t0 The starting temperature.
 	 * @param tabuSize The fixed size of the tabu list. By default, the fixed size is 1.
 	 * @return Return the optimal point if found.
 	 */
-	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final double t0, final int tabuSize) {
-		return search(f, x0, V, rOperation, t0, tabuSize, DEFAULT_MAX_ITERATION);
+	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize) {
+		return search(f, x0, V, rOperation, tabuSize, DEFAULT_MAX_ITERATION);
 	}
 	
 	/**
@@ -72,12 +70,11 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
 	 *          -> x'), and the invert function (x' -> x).
 	 * @param rOperation The operations we can apply on `R`.
-	 * @param t0 The starting temperature.
 	 * @param tabuSize The fixed size of the tabu list. By default, the fixed size is 1.
 	 * @param maxIteration The maximum number of iterations the algorithm can do.
 	 * @return Return the optimal point if found.
 	 */
-	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final double t0, final int tabuSize, final int maxIteration) {
+	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, final int maxIteration) {
 		TabuList<P, P> T = new TabuList<>(tabuSize);
 		
 		/**
