@@ -2,14 +2,16 @@ package quadratix.stats;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.Objects;
+import java.util.Observable;
 
 /**
  * Class that creates a stopwatch to measure time, in millisecond or nanosecond.
  * @see System#currentTimeMillis()
  * @see System#nanoTime()
  */
-public class Stopwatch {
+public class Stopwatch extends Observable implements Serializable, Cloneable {
 	
 	private long beginMs = 0;
 	private long beginNs = 0;
@@ -62,6 +64,8 @@ public class Stopwatch {
 		endNs = System.nanoTime();
 		endMs = System.currentTimeMillis();
 		setActivated(false);
+		notifyObservers();
+		setChanged();
 		return elapsedMs();
 	}
 	
