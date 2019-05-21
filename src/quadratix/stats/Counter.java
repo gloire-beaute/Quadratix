@@ -10,7 +10,7 @@ import java.util.Observable;
  */
 public class Counter extends Observable implements Serializable, Cloneable {
 	
-	public int c;
+	private int c;
 	
 	//region CONSTRUCTORS
 	
@@ -63,6 +63,13 @@ public class Counter extends Observable implements Serializable, Cloneable {
 	 */
 	public int decrement() {
 		return decrement(1);
+	}
+	
+	/**
+	 * Reset the counter to 0.
+	 */
+	public void reset() {
+		set(0);
 	}
 	
 	//endregion
