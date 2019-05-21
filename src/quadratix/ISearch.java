@@ -21,9 +21,8 @@ public interface ISearch<P, R> {
 	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
 	 *          -> x'), and the invert function (x' -> x).
 	 * @param rOperation The operations we can apply on `R`.
-	 * @param t0 The starting temperature.
 	 * @return Return the optimal point if found.
 	 */
 	@Nullable
-	P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final double t0);
+	P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation);
 }

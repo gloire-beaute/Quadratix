@@ -13,16 +13,19 @@ import java.util.function.Function;
 
 public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	
+	private int t0;
 	private int n1;
 	private int n2;
 	private double mu;
 	
-	public SimulatedAnnealing(int n1, int n2, double mu) {
+	public SimulatedAnnealing(int t0, int n1, int n2, double mu) {
+		setT0(t0);
 		setN1(n1);
 		setN2(n2);
 		setMu(mu);
 	}
 	public SimulatedAnnealing() {
+		setT0(1);
 		setN1(10);
 		setN2(10);
 		setMu(0.5);
@@ -33,9 +36,8 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	public P search(@NotNull final Function<P, R> f,
 	                final P x0,
 	                @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V,
-	                @NotNull final NumberOperations<R> rOperation,
-	                final double t0) {
-		return search(f, x0, V, rOperation, t0, getN1(), getN2(), getMu());
+	                @NotNull final NumberOperations<R> rOperation) {
+		return search(f, x0, V, rOperation, getT0(), getN1(), getN2(), getMu());
 	}
 	
 	@Nullable
@@ -85,6 +87,15 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	}
 	
 	//region GETTERS & SETTERS
+	
+	
+	public int getT0() {
+		return t0;
+	}
+	
+	public void setT0(int t0) {
+		this.t0 = t0;
+	}
 	
 	public int getN1() {
 		return n1;

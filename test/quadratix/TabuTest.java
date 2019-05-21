@@ -1,5 +1,8 @@
 package quadratix;
 
+import javafx.util.Pair;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 import quadratix.bits.Bits;
 import quadratix.tabu.Tabu;
@@ -65,7 +68,7 @@ class TabuTest {
 		
 		f = bits -> mapFitness.getOrDefault(bits, 0);
 		
-		Bits b = tabu.search(f, new Bits(15, NB_BITS), V_bits, intOps, 0.5, 1);
+		Bits b = tabu.search(f, new Bits(15, NB_BITS), V_bits, intOps, 1);
 		System.out.println("Result: f(" + b + ") = " + f.apply(b));
 		System.out.println("        =>" + b.getValue() + " in decimal");
 	}
@@ -77,11 +80,29 @@ class TabuTest {
 		
 		f = getSlideExerciseFitness();
 		
-		Bits b = tabu.search(f, new Bits(0, NB_BITS), V_bits, intOps, 5.0, 3);
+		Bits b = tabu.search(f, new Bits(0, NB_BITS), V_bits, intOps, 3);
 		System.out.println("Result: f(" + b + ") = " + f.apply(b));
 		System.out.println("        =>" + b.getValue() + " in decimal");
 		
 		assertEquals("1100", b.getBits());
 		assertEquals(0, f.apply(b));
+	}
+	
+	@Test
+	@Order(4)
+	void tdExercise() {
+		Tabu<Pair<Integer, Integer>, Double> tabu = new Tabu<>();
+		
+		Function<Pair<Integer, Integer>, Double> f = getTDExerciseFitness();
+		
+		// Create the neighborhood generator
+		Function<Pair<Integer, Integer>, HashMap<Pair<Integer, Integer>, ElementaryFunction<Pair<Integer, Integer>>>> V = getTDExerciseV();
+		
+		Pair<Integer, Integer> pair = tabu.search(f, new Pair<>(1, 1), V, NumberOperations.getDoubleOperations(), 1, 100);
+		System.out.println("Result: f((" + pair.getKey() + " ; " + pair.getValue() + ")) = " + f.apply(pair));
+		
+		assertEquals(4, pair.getKey());
+		assertEquals(4, pair.getValue());
+		assertEquals(-20, f.apply(pair));
 	}
 }

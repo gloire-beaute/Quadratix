@@ -67,7 +67,7 @@ public class AssignementProblem {
     public void tabuAlgortihm() {
         tabu = new Tabu<>();
 
-        outCombination = tabu.search(f, inCombination, V_combination, intOps, 5.0, 3);
+        outCombination = tabu.search(f, inCombination, V_combination, intOps, 3);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
         System.out.println("Fitness call: " + tabu.getFitnessCall());
     }
