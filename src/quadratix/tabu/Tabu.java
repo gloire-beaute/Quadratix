@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import quadratix.ElementaryFunction;
 import quadratix.ISearch;
 import quadratix.NumberOperations;
+import quadratix.stats.Counter;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,11 +25,11 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * The maximum number of iterations allow in the search.
 	 */
 	public static final int DEFAULT_MAX_ITERATION = 1000;
-	private int fitnessCall;
+	private Counter fitnessCall;
 	private int tabuSize;
 	
 	public Tabu(int tabuSize) {
-		setFitnessCall(0);
+		fitnessCall = new Counter();
 		setTabuSize(tabuSize);
 	}
 	public Tabu() {
@@ -75,6 +76,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @return Return the optimal point if found.
 	 */
 	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, final int maxIteration) {
+		fitnessCall.reset();
 		TabuList<P, P> T = new TabuList<>(tabuSize);
 		
 		/**
@@ -85,7 +87,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 		Vector<P> x = new Vector<>();
 		x.add(x0);
 		R fmin = f.apply(xmin);
-		fitnessCall++;
+		fitnessCall.increment();
 		int i = 0;
 		
 		do {
@@ -108,22 +110,22 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				
 				// Store the value of f(y) in order to minimize fitness call.
 				R fy = f.apply(y);
-				fitnessCall++;
+				fitnessCall.increment();
 				
 				for (P z : C) {
-					fitnessCall++;
+					fitnessCall.increment();
 					if (rOperation.compare(f.apply(z), fy) < 0) {
 						y = z;
 						// Recompute f(y) as `y` changed
 						fy = f.apply(y);
-						fitnessCall++;
+						fitnessCall.increment();
 						m = elemFuns.get(y);
 					}
 				}
 				
 				// Compute the fitness variation
 				R deltaF = rOperation.minus(fy, f.apply(x.get(i)));
-				fitnessCall++;
+				fitnessCall.increment();
 				
 				if (rOperation.compare(deltaF, rOperation.getZero()) >= 0) {
 					// Put m^-1 in T
@@ -150,11 +152,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	
 	@Contract(pure = true)
 	public int getFitnessCall() {
-		return fitnessCall;
-	}
-	
-	private void setFitnessCall(int fitnessCall) {
-		this.fitnessCall = fitnessCall;
+		return fitnessCall.get();
 	}
 	
 	@Contract(pure = true)

@@ -1,11 +1,13 @@
 package quadratix.simulatedannealing;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.ISearch;
 import quadratix.ListUtil;
 import quadratix.NumberOperations;
+import quadratix.stats.Counter;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -18,17 +20,17 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	private int n2;
 	private double mu;
 	
+	private Counter fitnessCall;
+	
 	public SimulatedAnnealing(int t0, int n1, int n2, double mu) {
 		setT0(t0);
 		setN1(n1);
 		setN2(n2);
 		setMu(mu);
+		fitnessCall = new Counter();
 	}
 	public SimulatedAnnealing() {
-		setT0(1);
-		setN1(10);
-		setN2(10);
-		setMu(0.5);
+		this(1, 10, 10, 0.5);
 	}
 	
 	@Nullable
@@ -49,10 +51,12 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	                final int n1,
 	                final int n2,
 	                final double mu) {
+		fitnessCall.reset();
 		P xmin = x0;
 		P xi = x0;
 		double tk = t0;
 		R fmin = f.apply(xmin);
+		fitnessCall.increment();
 		int i = 0;
 		
 		for (int k = 0; k < n1; k++) {
@@ -64,6 +68,7 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 				// Compute delta f
 				R f_xi = f.apply(xi);
 				R deltaF = rOperation.minus(f.apply(y), f_xi);
+				fitnessCall.increment(2);
 				
 				if (rOperation.compare(deltaF, rOperation.getZero()) <= 0) {
 					xi = y;
@@ -87,7 +92,6 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	}
 	
 	//region GETTERS & SETTERS
-	
 	
 	public int getT0() {
 		return t0;
@@ -119,6 +123,11 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	
 	public void setMu(double mu) {
 		this.mu = mu;
+	}
+	
+	@Contract(pure = true)
+	public int getFitnessCall() {
+		return fitnessCall.get();
 	}
 	
 	//endregion GETTERS & SETTERS
