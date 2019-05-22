@@ -5,17 +5,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
+import quadratix.stats.Randomizable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Random;
 import java.util.function.Function;
 
 /**
  * Class that represents an array of bits.
  */
-public class Bits extends Number implements Comparable<Bits>, Serializable, Cloneable {
+public class Bits extends Number implements Randomizable<Bits>, Comparable<Bits>, Serializable, Cloneable {
 	
 	private int length;
 	
@@ -224,6 +226,21 @@ public class Bits extends Number implements Comparable<Bits>, Serializable, Clon
 			
 			return map;
 		};
+	}
+	
+	/* RANDOMIZABLE OVERRIDE */
+	
+	@Override
+	public Bits generateRandom() {
+		return generateRandom(new Random().nextInt(5));// TODO: The minimum should be 1
+	}
+	public Bits generateRandom(int length) {
+		StringBuilder v = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			v.append(new Random().nextBoolean() ? '1' : '0');
+		}
+		assert v.length() == length;
+		return new Bits(v.toString(), length);
 	}
 	
 	/* NUMBER OVERRIDES */
