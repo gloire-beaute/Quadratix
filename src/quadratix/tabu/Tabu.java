@@ -24,7 +24,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	/**
 	 * The maximum number of iterations allow in the search.
 	 */
-	public static final int DEFAULT_MAX_ITERATION = 100000;
+	public static final int DEFAULT_MAX_ITERATION = 1000;
 	private Counter fitnessCall;
 	private int tabuSize;
 	

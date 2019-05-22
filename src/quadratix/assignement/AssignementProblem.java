@@ -89,7 +89,7 @@ public class AssignementProblem {
                             * assignmentData.getDistances().get(new Pair<>((long) i, (long) j));
                 }
             }
-            return result;
+            return 2*result;
         };
     }
 

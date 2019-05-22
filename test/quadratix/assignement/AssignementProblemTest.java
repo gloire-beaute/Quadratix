@@ -138,13 +138,8 @@ class AssignementProblemTest {
                 // Select the worst neighbor (s.t. f(neighbor) is the biggest)
                 Combination worstNeighbor = neighbors.get(0);
                 for (Combination neighbor : neighbors) {
-                    try {
-                        if (f.apply(neighbor) > f.apply(worstNeighbor))
-                            worstNeighbor = neighbor;
-                    } catch (NullPointerException ex) {
-                        ex.printStackTrace();
-                        System.out.println(neighbor);
-                    }
+                    if (f.apply(neighbor) > f.apply(worstNeighbor))
+                        worstNeighbor = neighbor;
                 }
                 // Compute deltaF
                 deltaFs.add(Math.abs(f.apply(c) - f.apply(worstNeighbor)));
