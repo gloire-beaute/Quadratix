@@ -149,7 +149,7 @@ public class Combination extends Vector<Long> implements Randomizable<Combinatio
 	}
 	public static Combination generateRandom(final int length) {
 		Combination c = new Combination(length);
-		for (int i = 0; i < length; i++) c.add((long) i);
+		for (int i = 0; i < length; i++) c.add((long) i+1);
 		for (int i = 0; i < length; i++) c.swap();
 		return c;
 	}

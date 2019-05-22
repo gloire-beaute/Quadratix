@@ -81,11 +81,11 @@ public class AssignementProblem {
     }
 
     private void setFitnessFunction() {
-        f = Combination -> {
+        f = (final Combination c) -> {
             int result = 0;
             for (int i = 1; i <= assignmentData.getLength(); i++) {
                 for (int j = i + 1; j <= assignmentData.getLength(); j++) {
-                    result += assignmentData.getWeights().get(new Pair<>(Combination.get(i-1), Combination.get(j-1)))
+                    result += assignmentData.getWeights().get(new Pair<>(c.get(i-1), c.get(j-1)))
                             * assignmentData.getDistances().get(new Pair<>((long) i, (long) j));
                 }
             }
