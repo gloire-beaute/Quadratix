@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
+import quadratix.stats.Irregular;
 import quadratix.stats.Randomizable;
 
 import java.io.Serializable;
@@ -230,11 +231,14 @@ public class Bits extends Number implements Randomizable<Bits>, Comparable<Bits>
 	
 	/* RANDOMIZABLE OVERRIDE */
 	
+	@NotNull
 	@Override
 	public Bits generateRandom() {
-		return generateRandom(new Random().nextInt(5));// TODO: The minimum should be 1
+		return generateRandom(Irregular.rangeInt(1, true, 8, true));
 	}
-	public Bits generateRandom(int length) {
+	@NotNull
+	@Contract("_ -> new")
+	public static Bits generateRandom(int length) {
 		StringBuilder v = new StringBuilder();
 		for (int i = 0; i < length; i++) {
 			v.append(new Random().nextBoolean() ? '1' : '0');
