@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
 import quadratix.bits.Bits;
+import quadratix.stats.Randomizable;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * Class that represents a combination of number.
  */
-public class Combination extends Vector<Long> implements Comparable<Combination>, Serializable, Cloneable {
+public class Combination extends Vector<Long> implements Randomizable<Combination>, Comparable<Combination>, Serializable, Cloneable {
 	
 	public Combination(@NotNull Long... elements) {
 		super(elements.length);
@@ -139,6 +140,21 @@ public class Combination extends Vector<Long> implements Comparable<Combination>
 			return map;
 		};
 	}
+	
+	//region RANDOMIZABLE OVERRIDE
+	
+	@Override
+	public Combination generateRandom() {
+		return null;
+	}
+	public static Combination generateRandom(final int length) {
+		Combination c = new Combination(length);
+		for (int i = 0; i < length; i++) c.add((long) i);
+		for (int i = 0; i < length; i++) c.swap();
+		return c;
+	}
+	
+	//endregion
 	
 	//region LIST OVERRIDES
 	

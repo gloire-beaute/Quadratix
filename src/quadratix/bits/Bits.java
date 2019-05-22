@@ -238,7 +238,7 @@ public class Bits extends Number implements Randomizable<Bits>, Comparable<Bits>
 	}
 	@NotNull
 	@Contract("_ -> new")
-	public static Bits generateRandom(int length) {
+	public static Bits generateRandom(final int length) {
 		StringBuilder v = new StringBuilder();
 		for (int i = 0; i < length; i++) {
 			v.append(new Random().nextBoolean() ? '1' : '0');

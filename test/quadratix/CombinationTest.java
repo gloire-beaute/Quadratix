@@ -1,16 +1,17 @@
 package quadratix;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import quadratix.combination.Combination;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CombinationTest {
 	
 	static Combination combination;
@@ -27,6 +28,7 @@ class CombinationTest {
 	}
 	
 	@Test
+	@Order(1)
 	void swap() {
 		Combination c = new Combination(combination);
 		c.swap(1, 3);
@@ -41,6 +43,7 @@ class CombinationTest {
 	}
 	
 	@Test
+	@Order(2)
 	void swap1() {
 		Combination c = new Combination(combination);
 		c.swap(1);
@@ -52,6 +55,7 @@ class CombinationTest {
 	}
 	
 	@Test
+	@Order(3)
 	void swap2() {
 		Combination c = new Combination(combination);
 		c.swap();
@@ -62,6 +66,7 @@ class CombinationTest {
 	}
 	
 	@Test
+	@Order(4)
 	void generateAllPossibility() {
 		ArrayList<Combination> possibilities = Combination.generateAllPossibility(2);
 		System.out.println(possibilities.stream().map(Combination::toString).collect(Collectors.joining("\n")));
@@ -76,5 +81,23 @@ class CombinationTest {
 		assertEquals(new Combination(2, 1, 3), possibilities.get(1));
 		assertEquals(new Combination(3, 2, 1), possibilities.get(2));
 		assertEquals(new Combination(1, 3, 2), possibilities.get(3));
+	}
+	
+	@Test
+	@Order(5)
+	void generateRandom() {
+		Combination c = Combination.generateRandom(1);
+		assertEquals(1, c.size());
+		assertTrue(c.get(0) == 0 || c.get(0) == 1);
+		
+		Set<Combination> ci = new HashSet<>(100);
+		for (int i = 0; i < 100; i++) {
+			c = Combination.generateRandom(4);
+			ci.add(c);
+			assertEquals(4, c.size());
+		}
+		System.out.println("Number of elements: " + ci.size());
+		ci.forEach(System.out::println);
+		assertEquals(12, ci.size());
 	}
 }
