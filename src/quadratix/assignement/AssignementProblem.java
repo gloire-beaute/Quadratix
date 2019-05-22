@@ -75,7 +75,21 @@ public class AssignementProblem {
     public void recuitAlgortihm() {
         simulatedAnnealing = new SimulatedAnnealing<>();
 
-        outCombination = simulatedAnnealing.search(f, inCombination, V_combination, intOps, 5.0, 100, 100, 0.1);
+        outCombination = simulatedAnnealing.search(
+                f,
+                inCombination,
+                V_combination,
+                intOps,
+                SimulatedAnnealing.computeTemperature(
+                        f,
+                        V_combination,
+                        intOps,
+                        v -> Combination.generateRandom(getAssignmentData().getLength()),
+                        i -> (double) i,
+                        1000),
+                100,
+                100,
+                0.1);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
 //        System.out.println("Fitness call: " + simulatedAnnealing.getFitnessCall());
     }
