@@ -144,7 +144,8 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				i++;
 			}
 		} while (i < maxIteration && !C.isEmpty());
-		
+
+		System.out.println("Number of iterations " + i);
 		return xmin;
 	}
 

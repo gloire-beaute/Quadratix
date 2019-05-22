@@ -58,9 +58,11 @@ public class TaillardReader {
                     }
 
                     if (spaceCounter == 1) {
-                        assignmentData.addWeight(new Pair<Long, Long>((long) lineCounter, (long) i), (long) value);
-                    } else {
                         assignmentData.addDistance(new Pair<Long, Long>((long) lineCounter, (long) i), (long) value);
+
+                    } else {
+                        assignmentData.addWeight(new Pair<Long, Long>((long) lineCounter, (long) i), (long) value);
+
                     }
                 }
             } else {

@@ -4,9 +4,11 @@ import javafx.util.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import quadratix.combination.Combination;
+import quadratix.data.CombinationGenerator;
 import quadratix.stats.Stopwatch;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 class AssignementProblemTest {
@@ -15,27 +17,27 @@ class AssignementProblemTest {
 
     @BeforeEach
     void setUp(){
+        try {
+            assignementProblem.taillardInitializer("tai30.txt");
+            System.out.println(assignementProblem.getAssignmentData().toString());
 
-        //////////////////////
-        /////// Taillard /////
-        //////////////////////
+            Combination initialComb = new Combination();
+            for (int i = 0; i < assignementProblem.getAssignmentData().getLength(); i++) {
+                initialComb.add((long) i+1);
+            }
+            assignementProblem.setInCombination(initialComb);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-//        try {
-//            assignementProblem.taillardInitializer("tai12.txt");
-//            System.out.println(assignementProblem.getAssignmentData().toString());
-//
-//            Combination initialComb = new Combination();
-//            for (int i = 0; i < assignementProblem.getAssignmentData().getLength(); i++) {
-//                initialComb.add((long) i+1);
-//            }
-//            assignementProblem.setInCombination(initialComb);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        Combination initialComb = new Combination();
+        for (int i = 0; i < assignementProblem.getAssignmentData().getLength(); i++) {
+            initialComb.add((long) i+1);
+        }
+        assignementProblem.setInCombination(initialComb);
+    }
 
-        //////////////////////
-        /////// Exemple /////
-        //////////////////////
+    void setupTD(){
 
         HashMap<Pair<Long, Long>, Long> weights = new HashMap<>();
         weights.put(new Pair<>(1L,1L),0L);
@@ -72,22 +74,29 @@ class AssignementProblemTest {
         distances.put(new Pair<>(5L,5L),0L);
 
         assignementProblem.customInitializer(5,weights,distances);
-        int fitness = assignementProblem.getF().apply(new Combination(1,3,4,5,2));
         System.out.println(assignementProblem.getAssignmentData().toString());
-//        assertEquals(78, fitness);
-
-        //////////////////////
-
-        Combination initialComb = new Combination();
-        for (int i = 0; i < assignementProblem.getAssignmentData().getLength(); i++) {
-            initialComb.add((long) i+1);
-        }
-        assignementProblem.setInCombination(/*new Combination(1,3,4,5,2)*/ initialComb);
+        assignementProblem.setInCombination(new Combination(1,3,4,5,2) );
     }
 
     @Test
     void tabuAlgorithm(){
-        assignementProblem.tabuAlgortihm();
+        try {
+            float sum = 0;
+            CombinationGenerator combinationGenerator = new CombinationGenerator(assignementProblem.getAssignmentData().getLength());
+            ArrayList<Combination> combinationArrayList = combinationGenerator.readFile();
+
+            for (int i = 0; i < combinationArrayList.size(); i++) {
+                assignementProblem.setInCombination(combinationArrayList.get(i));
+                assignementProblem.tabuAlgortihm();
+                sum += assignementProblem.getF().apply(assignementProblem.getOutCombination());
+            }
+
+            System.out.println("\n");
+            System.out.println("Average tabu " + sum/combinationArrayList.size());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
