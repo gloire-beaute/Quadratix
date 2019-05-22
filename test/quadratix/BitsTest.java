@@ -4,6 +4,8 @@ import org.junit.jupiter.api.*;
 import quadratix.bits.Bits;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -176,5 +178,23 @@ class BitsTest {
 		b1.setBits("11"); // 3
 		assertEquals("0011", b1.getBits());
 		assertEquals(3, b1.getValue());
+	}
+	
+	@Test
+	@Order(18)
+	void generateRandom() {
+		Bits b = Bits.generateRandom(1);
+		assertEquals(1, b.getLength());
+		assertEquals(1, b.getBits().length());
+		assertTrue(b.getValue() == 0 || b.getValue() == 1);
+		
+		Set<Bits> bi = new HashSet<>(100);
+		for (int i = 0; i < 100; i++) {
+			b = Bits.generateRandom(4);
+			bi.add(b);
+			assertEquals(4, b.getLength());
+			assertEquals(4, b.getBits().length());
+		}
+		assertEquals(16, bi.size());
 	}
 }
