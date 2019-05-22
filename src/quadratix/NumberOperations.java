@@ -27,6 +27,12 @@ public interface NumberOperations<T> extends Comparator<T> {
 	@Nullable
 	T getZero();
 	
+	default T abs(@Nullable T t) {
+		if (compare(t, getZero()) < 0)
+			t = minus(getZero(), t);
+		return t;
+	}
+	
 	//region STATIC METHODS
 	
 	@NotNull
