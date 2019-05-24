@@ -8,10 +8,14 @@ import quadratix.ISearch;
 import quadratix.ListUtil;
 import quadratix.NumberOperations;
 import quadratix.stats.Counter;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	
@@ -89,6 +93,45 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 		}
 		
 		return xmin;
+	}
+	
+	public static <P, R> double computeTemperature(final @NotNull Function<P, R> f,
+	                                               @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V,
+	                                               @NotNull final NumberOperations<R> rOperation,
+	                                               @NotNull final Function<Void, P> randomGenerator,
+	                                               @NotNull final Function<R, Double> rToDouble,
+	                                               final int nbIteration) {
+		ArrayList<R> deltaFs = new ArrayList<>(nbIteration);
+		
+		for (int i = 0; i < nbIteration; i++) {
+			// Generate randomly a combination
+			P x = randomGenerator.apply(null);
+			
+			// Generate all its neighbors
+			ArrayList<P> neighbors = new ArrayList<>(V.apply(x).keySet());
+			
+			if (!neighbors.isEmpty()) {
+				// Select the worst neighbor (s.t. f(neighbor) is the biggest)
+				P worstNeighbor = neighbors.get(0);
+				for (P neighbor : neighbors) {
+					if (rOperation.compare(f.apply(neighbor), f.apply(worstNeighbor)) > 0)
+						worstNeighbor = neighbor;
+				}
+				// Compute deltaF
+				deltaFs.add(rOperation.abs(rOperation.minus(f.apply(x), f.apply(worstNeighbor))));
+			}
+		}
+		
+		// Compute the average of deltaF's
+		double avg;
+		try {
+			avg = deltaFs.stream().mapToDouble(rToDouble::apply).average().getAsDouble();
+		} catch (NoSuchElementException ex) {
+			throw new IllegalArgumentException("Cannot compute the average for t0.", ex);
+		}
+		
+		// Compute t0 with a probability to accept neighbors of 80%
+		return - avg/Math.log(0.8);
 	}
 	
 	//region GETTERS & SETTERS

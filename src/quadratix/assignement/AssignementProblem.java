@@ -82,23 +82,36 @@ public class AssignementProblem {
 
     public void recuitAlgortihm() {
         simulatedAnnealing = new SimulatedAnnealing<>();
-
         System.out.println("\nRECUIT");
-        outCombination = simulatedAnnealing.search(f, inCombination, V_combination, intOps, 5.0, 100, 100, 0.1);
+        outCombination = simulatedAnnealing.search(
+                f,
+                inCombination,
+                V_combination,
+                intOps,
+                SimulatedAnnealing.computeTemperature(
+                        f,
+                        V_combination,
+                        intOps,
+                        v -> Combination.generateRandom(getAssignmentData().getLength()),
+                        i -> (double) i,
+                        1000),
+                100,
+                100,
+                0.1);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
 //        System.out.println("Fitness call: " + simulatedAnnealing.getFitnessCall());
     }
 
     private void setFitnessFunction() {
-        f = Combination -> {
+        f = (final Combination c) -> {
             int result = 0;
             for (int i = 1; i <= assignmentData.getLength(); i++) {
                 for (int j = i + 1; j <= assignmentData.getLength(); j++) {
-                    result += assignmentData.getWeights().get(new Pair<>(Combination.get(i-1), Combination.get(j-1)))
+                    result += assignmentData.getWeights().get(new Pair<>(c.get(i-1), c.get(j-1)))
                             * assignmentData.getDistances().get(new Pair<>((long) i, (long) j));
                 }
             }
-            return result;
+            return 2*result;
         };
     }
 

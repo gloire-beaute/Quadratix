@@ -9,7 +9,7 @@ import quadratix.bits.Bits;
 import java.util.HashMap;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static quadratix.SearchTestUtil.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -55,5 +55,21 @@ class SimulatedAnnealingTest {
 		assertEquals(4, pair.getKey());
 		assertEquals(4, pair.getValue());
 		assertEquals(-20, f.apply(pair));
+	}
+	
+	@Test
+	@Order(3)
+	void computeTemperature() {
+		// Compute temperature for slide exercise
+		double t0 = SimulatedAnnealing.computeTemperature(
+				getSlideExerciseFitness(),
+				V_bits,
+				intOps,
+				v -> Bits.generateRandom(NB_BITS),
+				i -> (double) i,
+				1000
+		);
+		System.out.println(String.format("t0 = %.4f°", t0));
+		assertTrue(t0 > 0);
 	}
 }
