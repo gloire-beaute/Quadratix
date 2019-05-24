@@ -29,7 +29,7 @@ public class TabuList<P, R> extends ArrayList<Function<P, R>> implements Seriali
 	 * Construct a tabu list.
 	 * @param fixedSize The fixed size of the list.
 	 */
-	public TabuList(int fixedSize) {
+	public TabuList(final int fixedSize) {
 		super(fixedSize);
 		setFixedSize(fixedSize);
 	}

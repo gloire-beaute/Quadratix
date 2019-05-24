@@ -5,14 +5,19 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
+import quadratix.bits.Bits;
 import quadratix.combination.Combination;
 import quadratix.data.AssignmentData;
 import quadratix.data.TaillardReader;
+import quadratix.simulatedannealing.SimulatedAnnealing;
 import quadratix.tabu.Tabu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AssignementProblem {
 
@@ -21,9 +26,12 @@ public class AssignementProblem {
     private Combination outCombination = new Combination();
 
     private Tabu<Combination, Integer> tabu;
+    private SimulatedAnnealing<Combination, Integer> simulatedAnnealing;
     private Function<Combination, Integer> f; //fitness
     private Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> V_combination;
     private NumberOperations<Integer> intOps;
+
+    private ArrayList<Combination> initValuesToTest = new ArrayList<>();
 
     public AssignementProblem() {
 
@@ -51,6 +59,10 @@ public class AssignementProblem {
         return assignmentData;
     }
 
+    public Combination getOutCombination() {
+        return outCombination;
+    }
+
     public void setInCombination(Combination inCombination) {
         this.inCombination = inCombination;
     }
@@ -62,20 +74,44 @@ public class AssignementProblem {
     public void tabuAlgortihm() {
         tabu = new Tabu<>();
 
-        outCombination = tabu.search(f, inCombination, V_combination, intOps, 5.0, 3);
+        System.out.println("\nTABU");
+        outCombination = tabu.search(f, inCombination, V_combination, intOps, 3);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
+        System.out.println("Fitness call: " + tabu.getFitnessCall());
+    }
+
+    public void recuitAlgortihm() {
+        simulatedAnnealing = new SimulatedAnnealing<>();
+        System.out.println("\nRECUIT");
+        outCombination = simulatedAnnealing.search(
+                f,
+                inCombination,
+                V_combination,
+                intOps,
+                SimulatedAnnealing.computeTemperature(
+                        f,
+                        V_combination,
+                        intOps,
+                        v -> Combination.generateRandom(getAssignmentData().getLength()),
+                        i -> (double) i,
+                        1000),
+                100,
+                100,
+                0.1);
+        System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
+//        System.out.println("Fitness call: " + simulatedAnnealing.getFitnessCall());
     }
 
     private void setFitnessFunction() {
-        f = Combination -> {
+        f = (final Combination c) -> {
             int result = 0;
             for (int i = 1; i <= assignmentData.getLength(); i++) {
                 for (int j = i + 1; j <= assignmentData.getLength(); j++) {
-                    result += assignmentData.getWeights().get(new Pair<>(Combination.get(i-1), Combination.get(j-1)))
+                    result += assignmentData.getWeights().get(new Pair<>(c.get(i-1), c.get(j-1)))
                             * assignmentData.getDistances().get(new Pair<>((long) i, (long) j));
                 }
             }
-            return result;
+            return 2*result;
         };
     }
 

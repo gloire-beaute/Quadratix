@@ -3,16 +3,22 @@ package quadratix.bits;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
+import quadratix.stats.Irregular;
+import quadratix.stats.Randomizable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Random;
+import java.util.function.Function;
 
 /**
  * Class that represents an array of bits.
  */
-public class Bits extends Number implements Comparable<Bits>, Serializable, Cloneable {
+public class Bits extends Number implements Randomizable<Bits>, Comparable<Bits>, Serializable, Cloneable {
 	
 	private int length;
 	
@@ -168,6 +174,7 @@ public class Bits extends Number implements Comparable<Bits>, Serializable, Clon
 	}
 	
 	@NotNull
+	@Contract(pure = true)
 	public static ArrayList<Bits> generateAllPossibility(int numberOfBits) {
 		ArrayList<Bits> possibilities = new ArrayList<>();
 		
@@ -187,6 +194,57 @@ public class Bits extends Number implements Comparable<Bits>, Serializable, Clon
 			possibilities.add(new Bits(i, numberOfBits));
 		
 		return possibilities;
+	}
+	
+	@NotNull
+	@Contract(pure = true)
+	public static Function<Bits, HashMap<Bits, ElementaryFunction<Bits>>> generateAllNeighbors() {
+		return bits -> {
+			HashMap<Bits, ElementaryFunction<Bits>> map = new HashMap<>();
+			
+			for (int i = 0; i < bits.getLength(); i++) {
+				Bits b = new Bits(bits);
+				b.invertBitFromLeft(i);
+				final int final_i = i;
+				map.put(b, new ElementaryFunction<Bits>() {
+					@Override
+					public Bits apply(final Bits bits) {
+						Bits b = new Bits(bits);
+						b.invertBitFromLeft(final_i);
+						return b;
+					}
+					
+					@Override
+					public @NotNull Function<Bits, Bits> invert() {
+						return (final Bits bits1) -> {
+							Bits b1 = new Bits(bits1);
+							b1.invertBitFromLeft(final_i);
+							return b1;
+						};
+					}
+				});
+			}
+			
+			return map;
+		};
+	}
+	
+	/* RANDOMIZABLE OVERRIDE */
+	
+	@NotNull
+	@Override
+	public Bits generateRandom() {
+		return generateRandom(Irregular.rangeInt(1, true, 8, true));
+	}
+	@NotNull
+	@Contract("_ -> new")
+	public static Bits generateRandom(final int length) {
+		StringBuilder v = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			v.append(new Random().nextBoolean() ? '1' : '0');
+		}
+		assert v.length() == length;
+		return new Bits(v.toString(), length);
 	}
 	
 	/* NUMBER OVERRIDES */
