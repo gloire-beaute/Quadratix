@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import quadratix.ElementaryFunction;
 import quadratix.combination.Combination;
+import quadratix.data.CombinationGenerator;
 import quadratix.data.AssignmentData;
 import quadratix.stats.Stopwatch;
 
@@ -24,13 +25,8 @@ class AssignementProblemTest {
 
     @BeforeEach
     void setUp(){
-
-        //////////////////////
-        /////// Taillard /////
-        //////////////////////
-
         try {
-            assignementProblem.taillardInitializer("tai12.txt");
+            assignementProblem.taillardInitializer("tai30.txt");
             System.out.println(assignementProblem.getAssignmentData().toString());
 
             Combination initialComb = new Combination();
@@ -42,61 +38,73 @@ class AssignementProblemTest {
             e.printStackTrace();
         }
 
-        //////////////////////
-        /////// Exemple /////
-        //////////////////////
-
-//        HashMap<Pair<Long, Long>, Long> weights = new HashMap<>();
-//        weights.put(new Pair<>(1L,1L),0L);
-//        weights.put(new Pair<>(1L,2L),12L);
-//        weights.put(new Pair<>(1L,3L),4L);
-//        weights.put(new Pair<>(1L,4L),3L);
-//        weights.put(new Pair<>(1L,5L),7L);
-//        weights.put(new Pair<>(2L,2L),0L);
-//        weights.put(new Pair<>(2L,3L),0L);
-//        weights.put(new Pair<>(2L,4L),6L);
-//        weights.put(new Pair<>(2L,5L),1L);
-//        weights.put(new Pair<>(3L,3L),0L);
-//        weights.put(new Pair<>(3L,4L),0L);
-//        weights.put(new Pair<>(3L,5L),2L);
-//        weights.put(new Pair<>(4L,4L),0L);
-//        weights.put(new Pair<>(4L,5L),0L);
-//        weights.put(new Pair<>(5L,5L),0L);
-//
-//        HashMap<Pair<Long, Long>, Long> distances = new HashMap<>();
-//        distances.put(new Pair<>(1L,1L),0L);
-//        distances.put(new Pair<>(1L,2L),2L);
-//        distances.put(new Pair<>(1L,3L),1L);
-//        distances.put(new Pair<>(1L,4L),2L);
-//        distances.put(new Pair<>(1L,5L),3L);
-//        distances.put(new Pair<>(2L,2L),0L);
-//        distances.put(new Pair<>(2L,3L),3L);
-//        distances.put(new Pair<>(2L,4L),2L);
-//        distances.put(new Pair<>(2L,5L),1L);
-//        distances.put(new Pair<>(3L,3L),0L);
-//        distances.put(new Pair<>(3L,4L),1L);
-//        distances.put(new Pair<>(3L,5L),2L);
-//        distances.put(new Pair<>(4L,4L),0L);
-//        distances.put(new Pair<>(4L,5L),1L);
-//        distances.put(new Pair<>(5L,5L),0L);
-//
-//        assignementProblem.customInitializer(5,weights,distances);
-//        int fitness = assignementProblem.getF().apply(new Combination(1,3,4,5,2));
-//        System.out.println(assignementProblem.getAssignmentData().toString());
-//        assertEquals(78, fitness);
-
-        //////////////////////
-
         Combination initialComb = new Combination();
         for (int i = 0; i < assignementProblem.getAssignmentData().getLength(); i++) {
             initialComb.add((long) i+1);
         }
-        assignementProblem.setInCombination(/*new Combination(1,3,4,5,2)*/ initialComb);
+        assignementProblem.setInCombination(initialComb);
+    }
+
+    void setupTD(){
+
+        HashMap<Pair<Long, Long>, Long> weights = new HashMap<>();
+        weights.put(new Pair<>(1L,1L),0L);
+        weights.put(new Pair<>(1L,2L),12L);
+        weights.put(new Pair<>(1L,3L),4L);
+        weights.put(new Pair<>(1L,4L),3L);
+        weights.put(new Pair<>(1L,5L),7L);
+        weights.put(new Pair<>(2L,2L),0L);
+        weights.put(new Pair<>(2L,3L),0L);
+        weights.put(new Pair<>(2L,4L),6L);
+        weights.put(new Pair<>(2L,5L),1L);
+        weights.put(new Pair<>(3L,3L),0L);
+        weights.put(new Pair<>(3L,4L),0L);
+        weights.put(new Pair<>(3L,5L),2L);
+        weights.put(new Pair<>(4L,4L),0L);
+        weights.put(new Pair<>(4L,5L),0L);
+        weights.put(new Pair<>(5L,5L),0L);
+
+        HashMap<Pair<Long, Long>, Long> distances = new HashMap<>();
+        distances.put(new Pair<>(1L,1L),0L);
+        distances.put(new Pair<>(1L,2L),2L);
+        distances.put(new Pair<>(1L,3L),1L);
+        distances.put(new Pair<>(1L,4L),2L);
+        distances.put(new Pair<>(1L,5L),3L);
+        distances.put(new Pair<>(2L,2L),0L);
+        distances.put(new Pair<>(2L,3L),3L);
+        distances.put(new Pair<>(2L,4L),2L);
+        distances.put(new Pair<>(2L,5L),1L);
+        distances.put(new Pair<>(3L,3L),0L);
+        distances.put(new Pair<>(3L,4L),1L);
+        distances.put(new Pair<>(3L,5L),2L);
+        distances.put(new Pair<>(4L,4L),0L);
+        distances.put(new Pair<>(4L,5L),1L);
+        distances.put(new Pair<>(5L,5L),0L);
+
+        assignementProblem.customInitializer(5,weights,distances);
+        System.out.println(assignementProblem.getAssignmentData().toString());
+        assignementProblem.setInCombination(new Combination(1,3,4,5,2) );
     }
 
     @Test
     void tabuAlgorithm(){
-        assignementProblem.tabuAlgortihm();
+        try {
+            float sum = 0;
+            CombinationGenerator combinationGenerator = new CombinationGenerator(assignementProblem.getAssignmentData().getLength());
+            ArrayList<Combination> combinationArrayList = combinationGenerator.readFile();
+
+            for (int i = 0; i < combinationArrayList.size(); i++) {
+                assignementProblem.setInCombination(combinationArrayList.get(i));
+                assignementProblem.tabuAlgortihm();
+                sum += assignementProblem.getF().apply(assignementProblem.getOutCombination());
+            }
+
+            System.out.println("\n");
+            System.out.println("Average tabu " + sum/combinationArrayList.size());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

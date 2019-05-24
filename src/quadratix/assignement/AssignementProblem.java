@@ -13,6 +13,7 @@ import quadratix.simulatedannealing.SimulatedAnnealing;
 import quadratix.tabu.Tabu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
 
@@ -25,10 +26,12 @@ public class AssignementProblem {
     private Combination outCombination = new Combination();
 
     private Tabu<Combination, Integer> tabu;
-    private  SimulatedAnnealing<Combination, Integer> simulatedAnnealing;
+    private SimulatedAnnealing<Combination, Integer> simulatedAnnealing;
     private Function<Combination, Integer> f; //fitness
     private Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> V_combination;
     private NumberOperations<Integer> intOps;
+
+    private ArrayList<Combination> initValuesToTest = new ArrayList<>();
 
     public AssignementProblem() {
 
@@ -56,6 +59,10 @@ public class AssignementProblem {
         return assignmentData;
     }
 
+    public Combination getOutCombination() {
+        return outCombination;
+    }
+
     public void setInCombination(Combination inCombination) {
         this.inCombination = inCombination;
     }
@@ -67,6 +74,7 @@ public class AssignementProblem {
     public void tabuAlgortihm() {
         tabu = new Tabu<>();
 
+        System.out.println("\nTABU");
         outCombination = tabu.search(f, inCombination, V_combination, intOps, 3);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
         System.out.println("Fitness call: " + tabu.getFitnessCall());
@@ -74,7 +82,7 @@ public class AssignementProblem {
 
     public void recuitAlgortihm() {
         simulatedAnnealing = new SimulatedAnnealing<>();
-
+        System.out.println("\nRECUIT");
         outCombination = simulatedAnnealing.search(
                 f,
                 inCombination,
