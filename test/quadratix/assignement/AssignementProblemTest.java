@@ -26,7 +26,7 @@ class AssignementProblemTest {
     @BeforeEach
     void setUp(){
         try {
-            assignementProblem.taillardInitializer("tai30.txt");
+            assignementProblem.taillardInitializer("tai12.txt");
             System.out.println(assignementProblem.getAssignmentData().toString());
 
             Combination initialComb = new Combination();
@@ -45,6 +45,7 @@ class AssignementProblemTest {
         assignementProblem.setInCombination(initialComb);
     }
 
+    @Test
     void setupTD(){
 
         HashMap<Pair<Long, Long>, Long> weights = new HashMap<>();
@@ -84,6 +85,7 @@ class AssignementProblemTest {
         assignementProblem.customInitializer(5,weights,distances);
         System.out.println(assignementProblem.getAssignmentData().toString());
         assignementProblem.setInCombination(new Combination(1,3,4,5,2) );
+        System.out.println(assignementProblem.getF().apply(new Combination(3,1,4,5,2)));
     }
 
     @Test
@@ -184,7 +186,7 @@ class AssignementProblemTest {
 //        System.out.println( "4 8 11 15 17 20 21 5 14 30 2 13 6 29 10 26 27 24 28 22 12 9 7 23 19 18 25 16 1 3 : " +
 //                assignementProblem.getF().apply(new Combination(4,8, 11, 15, 17, 20, 21, 5, 14, 30, 2, 13, 6, 29, 10, 26, 27, 24, 28, 22, 12, 9, 7, 23, 19, 18, 25, 16, 1, 3)));
 //     TAI 12
-//        System.out.println( "8,1,6,2,11,10,3,5,9,7,12,4 : " +
+//        System.out.println( "(8,1,6,2,11,10,3,5,9,7,12,4)  : " +
 //                assignementProblem.getF().apply(new Combination(8,1,6,2,11,10,3,5,9,7,12,4)));
 
 

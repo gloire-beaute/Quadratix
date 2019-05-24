@@ -3,6 +3,7 @@ package quadratix.data;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class TaillardReader {
 
@@ -48,7 +49,6 @@ public class TaillardReader {
                 if (assignmentData.getLength() == null)
                     throw new AssignmentDataException("No length found in Taillard file");
 
-                //TODO optimize for loop (starting with lincounter because we transpose left side)
                 for (int i = 0; i < assignmentData.getLength(); i++) {
                     int value;
                     try {
@@ -58,10 +58,10 @@ public class TaillardReader {
                     }
 
                     if (spaceCounter == 1) {
-                        assignmentData.addDistance(new Pair<Long, Long>((long) lineCounter, (long) i), (long) value);
+                        assignmentData.addDistance(new Pair<>((long) lineCounter, (long) i+1), (long) value);
 
                     } else {
-                        assignmentData.addWeight(new Pair<Long, Long>((long) lineCounter, (long) i), (long) value);
+                        assignmentData.addWeight(new Pair<>((long) lineCounter, (long) i+1), (long) value);
 
                     }
                 }

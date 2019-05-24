@@ -30,18 +30,14 @@ public class AssignmentData {
     }
 
     public void addWeight(Pair<Long, Long> pair, Long weight){
-        Pair<Long, Long> revertedPair = new Pair<>(pair.getValue(),pair.getKey());
-        if(!this.weights.containsKey(pair) && !this.weights.containsKey(revertedPair)){
+        if(!this.weights.containsKey(pair)){
             this.weights.put(pair,weight);
-            this.weights.put(revertedPair,weight);
         }
     }
 
     public void addDistance(Pair<Long, Long> pair, Long distance){
-        Pair<Long, Long> revertedPair = new Pair<>(pair.getValue(),pair.getKey());
-        if(!this.distances.containsKey(pair) && !this.distances.containsKey(revertedPair)){
+        if(!this.distances.containsKey(pair)){
             this.distances.put(pair,distance);
-            this.distances.put(revertedPair,distance);
         }
     }
 
