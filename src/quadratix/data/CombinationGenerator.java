@@ -47,8 +47,8 @@ public class CombinationGenerator {
 
             if (!lineContent[0].equals("")) {
                 Combination combination = new Combination();
-                for (int i = 0; i < lineContent.length; i++) {
-                    combination.add(Long.valueOf(lineContent[i].replace(" ", "")));
+                for (String s : lineContent) {
+                    combination.add(Long.valueOf(s.replace(" ", "")));
                 }
                 initialValues.add(combination);
             }

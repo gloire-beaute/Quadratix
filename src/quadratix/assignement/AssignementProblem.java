@@ -96,7 +96,7 @@ public class AssignementProblem {
                         intOps,
                         v -> Combination.generateRandom(getAssignmentData().getLength()),
                         i -> (double) i,
-                        1000)
+                        10)
                 : t0,
                 100,
                 100,
