@@ -1,19 +1,22 @@
 package quadratix.tabu;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
  * Class that inherits from
- * `ArrayList<Function<P, R>>`. It is a list with a fixed size, defined when it is constructed: When the list is at full
- * capacity, and a new element is added, it will overwrite the first element. The elements listed are only functions
- * (through the interface `Function`). Be careful not to get confuse betweenb`size()` which is the actual size of the
- * list (exactly like in `List`), and `getFixedSize()`,bwhich is the fixed length of the list. `size()` ≤
- * `getFixedSize()`.
+ * {@code ArrayList<Function<P, R>>}. It is a list with a fixed size, defined when it is constructed: When the list is
+ * at full capacity, and a new element is added, it will overwrite the first element. The elements listed are only
+ * functions (through the interface `Function`). Be careful not to get confuse between {@link #size()} which is the
+ * actual size of the list (exactly like in {@link java.util.List}), and {@link #getFixedSize()},which is the fixed
+ * length of the list. {@link #size()} ≤ {@link #getFixedSize()}.
  * @param <P> Denotes the parameter type of the fitness function, that can be any elements (bits, combination, number,
  *           ...).
  * @param <R> represents the return type of the fitness function. It is often a number (integer or real).
@@ -36,6 +39,7 @@ public class TabuList<P, R> extends ArrayList<Function<P, R>> implements Seriali
 	
 	/**
 	 * Construct a tabu list. The fixed size of the list is equal to the size of the given collection.
+	 * {@inheritDoc}
 	 */
 	public TabuList(@NotNull Collection<? extends Function<P, R>> c) {
 		super(c);
@@ -101,12 +105,13 @@ public class TabuList<P, R> extends ArrayList<Function<P, R>> implements Seriali
 	/* OVERRIDE */
 	
 	@Override
+	@Contract(value = "null -> false", pure = true)
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (!(o instanceof TabuList)) return false;
 		if (!super.equals(o)) return false;
-		TabuList<?, ?> tabuList = (TabuList<?, ?>) o;
-		return getFixedSize() == tabuList.getFixedSize();
+		TabuList<?, ?> that = (TabuList<?, ?>) o;
+		return this.getFixedSize() == that.getFixedSize();
 	}
 	
 	@Override

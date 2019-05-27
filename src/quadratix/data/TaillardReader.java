@@ -21,7 +21,7 @@ public class TaillardReader {
      * Extract assignement quadratix.data from taillard instances
      *
      * @return AssignmentData object with taillard's given quadratix.data
-     * @throws IOException
+     * @throws IOException Throw when an error occurred while reading the file.
      */
     public AssignmentData createAssignementData() throws IOException {
         AssignmentData assignmentData = new AssignmentData();

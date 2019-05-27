@@ -19,7 +19,7 @@ public interface ISearch<P, R> {
 	 * @param f The fitness function.
 	 * @param x0 The starting point.
 	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
-	 *          -> x'), and the invert function (x' -> x).
+	 *          -&gt; x'), and the invert function (x' -&gt; x).
 	 * @param rOperation The operations we can apply on `R`.
 	 * @return Return the optimal point if found.
 	 */
