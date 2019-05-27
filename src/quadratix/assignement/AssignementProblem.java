@@ -29,18 +29,15 @@ public class AssignementProblem {
     private SimulatedAnnealing<Combination, Integer> simulatedAnnealing;
     private Function<Combination, Integer> f; //fitness
     private Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> V_combination;
-    private NumberOperations<Integer> intOps;
+    private NumberOperations<Integer> intOps = NumberOperations.getIntegerOperations();
 
     private ArrayList<Combination> initValuesToTest = new ArrayList<>();
 
-    public AssignementProblem() {
-
-    }
+    public AssignementProblem() {}
 
     public void setup(){
         this.setFitnessFunction();
         this.setNeighborsFunction();
-        this.setOperations();
     }
 
     public void taillardInitializer(@NotNull String filename) throws IOException {
@@ -70,10 +67,14 @@ public class AssignementProblem {
     public Function<Combination, Integer> getF() {
         return f;
     }
+    
+    public Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> getV() {
+        return V_combination;
+    }
 
     public void tabuAlgortihm() {
         tabu = new Tabu<>();
-
+        
         System.out.println("\nTABU");
         outCombination = tabu.search(f, inCombination, V_combination, intOps, 3);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
@@ -148,46 +149,6 @@ public class AssignementProblem {
                 }
             }
             return map;
-        };
-    }
-
-    private void setOperations() {
-        //TODO change operations ?
-        intOps = new NumberOperations<Integer>() {
-            @Nullable
-            @Override
-            public Integer plus(@Nullable Integer t1, @Nullable Integer t2) {
-                return t1 + t2;
-            }
-
-            @Nullable
-            @Override
-            public Integer minus(@Nullable Integer t1, @Nullable Integer t2) {
-                return t1 - t2;
-            }
-
-            @Nullable
-            @Override
-            public Integer multiply(@Nullable Integer t1, @Nullable Integer t2) {
-                return t1 * t2;
-            }
-
-            @Nullable
-            @Override
-            public Integer divide(@Nullable Integer t1, @Nullable Integer t2) {
-                return t1 / t2;
-            }
-
-            @Nullable
-            @Override
-            public Integer getZero() {
-                return 0;
-            }
-
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1.compareTo(o2);
-            }
         };
     }
 }
