@@ -3,6 +3,7 @@ package quadratix.data;
 import javafx.util.Pair;
 
 import java.io.*;
+import java.util.Arrays;
 
 public class TaillardReader {
 
@@ -19,11 +20,11 @@ public class TaillardReader {
     /**
      * Extract assignement quadratix.data from taillard instances
      *
-     * @return AssignementData object with taillard's given quadratix.data
+     * @return AssignmentData object with taillard's given quadratix.data
      * @throws IOException
      */
-    public AssignementData createAssignementData() throws IOException {
-        AssignementData assignementData = new AssignementData();
+    public AssignmentData createAssignementData() throws IOException {
+        AssignmentData assignmentData = new AssignmentData();
 
         String line;
         int spaceCounter = 0;
@@ -43,24 +44,25 @@ public class TaillardReader {
                 if (length == 0)
                     throw new IllegalArgumentException("Length argument cannot be equals to 0");
 
-                assignementData.setLength(length);
+                assignmentData.setLength(length);
             } else if (lineContent.length > 1) {
-                if (assignementData.getLength() == null)
-                    throw new AssignementDataException("No length found in Taillard file");
+                if (assignmentData.getLength() == null)
+                    throw new AssignmentDataException("No length found in Taillard file");
 
-                //TODO optimize for loop (starting with lincounter because we transpose left side)
-                for (int i = 0; i < assignementData.getLength(); i++) {
+                for (int i = 0; i < assignmentData.getLength(); i++) {
                     int value;
                     try {
                         value = Integer.parseInt(lineContent[i]);
                     } catch (ArrayIndexOutOfBoundsException ex) {
-                        throw new AssignementDataException("Number of arguments exceed length");
+                        throw new AssignmentDataException("Number of arguments exceed length");
                     }
 
                     if (spaceCounter == 1) {
-                        assignementData.addWeight(new Pair<Long, Long>((long) lineCounter, (long) i), (long) value);
+                        assignmentData.addDistance(new Pair<>((long) lineCounter, (long) i+1), (long) value);
+
                     } else {
-                        assignementData.addDistance(new Pair<Long, Long>((long) lineCounter, (long) i), (long) value);
+                        assignmentData.addWeight(new Pair<>((long) lineCounter, (long) i+1), (long) value);
+
                     }
                 }
             } else {
@@ -72,15 +74,15 @@ public class TaillardReader {
         System.out.print("->");
 
         //CHECK DATA
-        if (assignementData.getDistances().isEmpty())
-            throw new AssignementDataException("Taillard's distances must be informed");
+        if (assignmentData.getDistances().isEmpty())
+            throw new AssignmentDataException("Taillard's distances must be informed");
 
-        if (assignementData.getWeights().isEmpty())
-            throw new AssignementDataException("Taillard's weights must be informed");
+        if (assignmentData.getWeights().isEmpty())
+            throw new AssignmentDataException("Taillard's weights must be informed");
 
-        if (assignementData.getDistances().size() != assignementData.getWeights().size())
-            throw new AssignementDataException("Taillard's distances vector and weights vector must have same length");
+        if (assignmentData.getDistances().size() != assignmentData.getWeights().size())
+            throw new AssignmentDataException("Taillard's distances vector and weights vector must have same length");
 
-        return assignementData;
+        return assignmentData;
     }
 }
