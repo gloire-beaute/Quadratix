@@ -11,6 +11,20 @@ import java.util.function.Function;
 public class SearchTestUtil {
 	
 	public static final int NB_BITS = 4;
+	public static final String[] taillardFilenames = {
+			"tai12.txt",
+			"tai15.txt",
+			"tai17.txt",
+			"tai20.txt",
+			"tai25.txt",
+			"tai30.txt",
+			"tai35.txt",
+			"tai40.txt",
+			"tai50.txt",
+			"tai60.txt",
+			"tai80.txt",
+			"tai100.txt",
+	};
 	
 	@NotNull
 	@Contract(" -> new")
