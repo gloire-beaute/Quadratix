@@ -80,7 +80,7 @@ public class AssignementProblem {
         System.out.println("Fitness call: " + tabu.getFitnessCall());
     }
 
-    public void recuitAlgortihm() {
+    public void recuitAlgortihm(@Nullable Double t0) {
         simulatedAnnealing = new SimulatedAnnealing<>();
         System.out.println("\nRECUIT");
         outCombination = simulatedAnnealing.search(
@@ -88,18 +88,23 @@ public class AssignementProblem {
                 inCombination,
                 V_combination,
                 intOps,
+                t0 == null ?
                 SimulatedAnnealing.computeTemperature(
                         f,
                         V_combination,
                         intOps,
                         v -> Combination.generateRandom(getAssignmentData().getLength()),
                         i -> (double) i,
-                        1000),
+                        1000)
+                : t0,
                 100,
                 100,
                 0.1);
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
 //        System.out.println("Fitness call: " + simulatedAnnealing.getFitnessCall());
+    }
+    public void recuitAlgortihm() {
+        recuitAlgortihm(null);
     }
 
     private void setFitnessFunction() {
