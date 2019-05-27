@@ -37,13 +37,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	}
 	
 	/**
-	 * Search the optimal point in a space of solutions.
-	 * @param f The fitness function.
-	 * @param x0 The starting point.
-	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
-	 *          -> x'), and the invert function (x' -> x).
-	 * @param rOperation The operations we can apply on `R`.
-	 * @return Return the optimal point if found.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation) {
@@ -55,7 +49,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @param f The fitness function.
 	 * @param x0 The starting point.
 	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
-	 *          -> x'), and the invert function (x' -> x).
+	 *          -&gt; x'), and the invert function (x' -&gt; x).
 	 * @param rOperation The operations we can apply on `R`.
 	 * @param tabuSize The fixed size of the tabu list. By default, the fixed size is 1.
 	 * @return Return the optimal point if found.
@@ -69,7 +63,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @param f The fitness function.
 	 * @param x0 The starting point.
 	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
-	 *          -> x'), and the invert function (x' -> x).
+	 *          -&gt; x'), and the invert function (x' -&gt; x).
 	 * @param rOperation The operations we can apply on `R`.
 	 * @param tabuSize The fixed size of the tabu list. By default, the fixed size is 1.
 	 * @param maxIteration The maximum number of iterations the algorithm can do.
