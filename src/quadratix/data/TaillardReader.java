@@ -29,14 +29,9 @@ public class TaillardReader {
         String line;
         int spaceCounter = 0;
         int lineCounter = 1;
-        System.out.print("Processing\n");
 
         while ((line = this.bufferedReader.readLine()) != null) {
             lineCounter++;
-            //Progress bar
-            System.out.print("-");
-
-            //Processing
             String[] lineContent = line.trim().split("\\s+");
 
             if (lineContent.length == 1 && !lineContent[0].equals("")) {
