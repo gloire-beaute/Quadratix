@@ -66,8 +66,6 @@ public class TaillardReader {
             }
         }
 
-        System.out.print("->");
-
         //CHECK DATA
         if (assignmentData.getDistances().isEmpty())
             throw new AssignmentDataException("Taillard's distances must be informed");
