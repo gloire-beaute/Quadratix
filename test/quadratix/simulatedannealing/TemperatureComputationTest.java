@@ -2,25 +2,23 @@ package quadratix.simulatedannealing;
 
 import javafx.util.Pair;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
 import quadratix.assignement.AssignementProblem;
-import quadratix.bits.Bits;
 import quadratix.combination.Combination;
-import quadratix.data.AssignmentData;
 import quadratix.stats.Stopwatch;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static quadratix.SearchTestUtil.*;
+import static quadratix.SearchTestUtil.taillardFilenames;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TemperatureComputationTest {
@@ -50,6 +48,7 @@ public class TemperatureComputationTest {
 	 * Test the taillard instance by computing several time
 	 * {@link SimulatedAnnealing#computeTemperature(Function, Function, NumberOperations, Function, Function, int)} with
 	 * different numbers of iterations.
+	 *
 	 * @param filename The filename where the taillard instance is stored.
 	 * @return Return a map from the number of iterations to the result and the execution time (in milliseconds).
 	 * @throws IOException Throw when the taillard instance could not be parsed.
