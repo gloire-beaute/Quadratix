@@ -2,6 +2,7 @@ package quadratix.tabu;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.ISearch;
 import quadratix.NumberOperations;
@@ -41,7 +42,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 */
 	@Override
 	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation) {
-		return search(f, x0, V, rOperation, getTabuSize(), DEFAULT_MAX_ITERATION);
+		return search(f, x0, V, rOperation, getTabuSize(), DEFAULT_MAX_ITERATION, null);
 	}
 	
 	/**
@@ -54,8 +55,16 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @param tabuSize The fixed size of the tabu list. By default, the fixed size is 1.
 	 * @return Return the optimal point if found.
 	 */
+	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, @Nullable R optima) {
+		return search(f, x0, V, rOperation, tabuSize, DEFAULT_MAX_ITERATION, optima);
+	}
+
 	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize) {
-		return search(f, x0, V, rOperation, tabuSize, DEFAULT_MAX_ITERATION);
+		return search(f, x0, V, rOperation, tabuSize, DEFAULT_MAX_ITERATION, null);
+	}
+
+	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, final int maxIteration) {
+		return search(f, x0, V, rOperation, tabuSize, maxIteration, null);
 	}
 	
 	/**
@@ -69,7 +78,8 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @param maxIteration The maximum number of iterations the algorithm can do.
 	 * @return Return the optimal point if found.
 	 */
-	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, final int maxIteration) {
+	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, final int maxIteration, @Nullable R optima) {
+		Integer firstIteration = -1;
 		fitnessCall.reset();
 		TabuList<P, P> T = new TabuList<>(tabuSize);
 		
@@ -85,6 +95,10 @@ public class Tabu<P, R> implements ISearch<P, R> {
 		int i = 0;
 		
 		do {
+			if(firstIteration == -1 && optima != null && rOperation.compare(fmin, optima) == 0){
+				firstIteration = i;
+			}
+
 			HashMap<P, ElementaryFunction<P>> elemFuns = V.apply(x.get(i));
 			C.clear();
 			C.addAll(elemFuns.keySet());
@@ -139,7 +153,9 @@ public class Tabu<P, R> implements ISearch<P, R> {
 			}
 		} while (i < maxIteration && !C.isEmpty());
 
-		System.out.println("Number of iterations " + i);
+		if(firstIteration!= -1) {
+			System.out.println("Optima found at iteration " + firstIteration);
+		}
 		return xmin;
 	}
 

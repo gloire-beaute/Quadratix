@@ -98,7 +98,7 @@ public class Stopwatch extends Observable implements Serializable, Cloneable {
 	//region STATIC METHODS
 	
 	/**
-	 * Measure the time to execute {@code function}.
+	 * Measure the time to getNeighborhoods {@code function}.
 	 * @param function The function to measure.
 	 * @param inMillisecond If {@code true}, return the result in milliseconds. Otherwise in nanoseconds.
 	 * @return Return the elapsed time between the beginning of the function passed as argument and its end.
@@ -114,7 +114,7 @@ public class Stopwatch extends Observable implements Serializable, Cloneable {
 	}
 	
 	/**
-	 * Measure the time to execute {@code function}.
+	 * Measure the time to getNeighborhoods {@code function}.
 	 * @param function The function to measure.
 	 * @return Return the elapsed time between the beginning of the function passed as argument and its end, in
 	 * milliseconds.
@@ -124,7 +124,7 @@ public class Stopwatch extends Observable implements Serializable, Cloneable {
 	}
 	
 	/**
-	 * Measure the time to execute {@code function}.
+	 * Measure the time to getNeighborhoods {@code function}.
 	 * @param function The function to measure.
 	 * @return Return the elapsed time between the beginning of the function passed as argument and its end, in
 	 * nanoseconds.
