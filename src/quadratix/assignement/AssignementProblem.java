@@ -5,10 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
-import quadratix.bits.Bits;
 import quadratix.combination.Combination;
 import quadratix.data.AssignmentData;
 import quadratix.data.TaillardReader;
+import quadratix.neighborhood.Neighborhood;
+import quadratix.neighborhood.NeighborhoodFull;
 import quadratix.simulatedannealing.SimulatedAnnealing;
 import quadratix.tabu.Tabu;
 
@@ -17,13 +18,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class AssignementProblem {
 
     private AssignmentData assignmentData = new AssignmentData();
     private Combination inCombination = new Combination();
     private Combination outCombination = new Combination();
+    private Neighborhood neighborhood = new Neighborhood(new NeighborhoodFull());
 
     private Tabu<Combination, Integer> tabu;
     private SimulatedAnnealing<Combination, Integer> simulatedAnnealing;
@@ -32,14 +32,17 @@ public class AssignementProblem {
     private NumberOperations<Integer> intOps = NumberOperations.getIntegerOperations();
 
     private ArrayList<Combination> initValuesToTest = new ArrayList<>();
+    private int tabuSize = 3;
 
     public AssignementProblem() {}
 
     public void setup(){
         this.setFitnessFunction();
-        this.setNeighborsFunction();
+        this.setNeighborsFunction(0, 15);
     }
 
+    // Initializer
+    // region
     public void taillardInitializer(@NotNull String filename) throws IOException {
         TaillardReader taillardReader = new TaillardReader(filename);
         this.assignmentData = taillardReader.createAssignementData();
@@ -52,6 +55,10 @@ public class AssignementProblem {
         this.setup();
     }
 
+    //endregion
+
+    // Getters - Setters
+    // region
     public AssignmentData getAssignmentData() {
         return assignmentData;
     }
@@ -72,18 +79,33 @@ public class AssignementProblem {
         return V_combination;
     }
 
-    public void tabuAlgortihm() {
+    public void setV_combination(Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> v_combination) {
+        V_combination = v_combination;
+    }
+
+    public void setTabuSize(int tabuSize) {
+        this.tabuSize = tabuSize;
+    }
+
+    //endregion
+
+    // Algorithms
+    // region
+    public void tabuAlgortihm(@Nullable Integer optima) {
         tabu = new Tabu<>();
-        
-        System.out.println("\nTABU");
-        outCombination = tabu.search(f, inCombination, V_combination, intOps, 3);
+        outCombination = tabu.search(f, inCombination, V_combination, intOps, this.tabuSize, optima);
+    }
+
+    public void tabuAlgortihm() {
+       this.tabuAlgortihm(null);
+    }
+
+    public void printOutput(){
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
-        System.out.println("Fitness call: " + tabu.getFitnessCall());
     }
 
     public void recuitAlgortihm(@Nullable Double t0) {
         simulatedAnnealing = new SimulatedAnnealing<>();
-        System.out.println("\nRECUIT");
         outCombination = simulatedAnnealing.search(
                 f,
                 inCombination,
@@ -101,12 +123,12 @@ public class AssignementProblem {
                 100,
                 100,
                 0.1);
-        System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
-//        System.out.println("Fitness call: " + simulatedAnnealing.getFitnessCall());
     }
     public void recuitAlgortihm() {
         recuitAlgortihm(null);
     }
+
+    //endregion
 
     private void setFitnessFunction() {
         f = (final Combination c) -> {
@@ -121,34 +143,9 @@ public class AssignementProblem {
         };
     }
 
-    private void setNeighborsFunction() {
-        V_combination = combination -> {
-            HashMap<Combination, ElementaryFunction<Combination>> map = new HashMap<>();
-
-            for (int i = 0; i < assignmentData.getLength(); i++) {
-                for (int j = i+1; j < assignmentData.getLength(); j++) {
-                    Combination c = new Combination(combination);
-                    c.swap(i, j);
-                    final int final_i = i;
-                    final int final_j = j;
-                    map.put(c, new ElementaryFunction<Combination>() {
-                        @Override
-                        public Combination apply(Combination combination1) {
-                            combination1.swap(final_i, final_j);
-                            return combination1;
-                        }
-
-                        @Override
-                        public @NotNull Function<Combination, Combination> invert() {
-                            return combination1 -> {
-                                combination1.swap(final_i, final_j);
-                                return combination1;
-                            };
-                        }
-                    });
-                }
-            }
-            return map;
-        };
+    public void setNeighborsFunction(int type, int param){
+        neighborhood.switchState(type, param);
+        V_combination = neighborhood.getAllNeighborhoods();
     }
+
 }
