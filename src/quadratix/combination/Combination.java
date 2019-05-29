@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * Class that represents a combination of number.
  */
-public class Combination extends Vector<Long> implements Randomizable<Combination>, Comparable<Combination>, Serializable, Cloneable {
+public class Combination extends Vector<Long> implements Randomizable<Combination>, Serializable, Cloneable {
 
     public Combination(@NotNull Long... elements) {
         super(elements.length);
@@ -211,11 +211,6 @@ public class Combination extends Vector<Long> implements Randomizable<Combinatio
 
     //region LIST OVERRIDES
 
-    @Override
-    public int compareTo(@NotNull Combination o) {
-        throw new NotImplementedException();
-    }
-
     @NotNull
     @Contract(value = " -> new", pure = true)
     public static NumberOperations<Combination> getOperations() {
@@ -252,14 +247,7 @@ public class Combination extends Vector<Long> implements Randomizable<Combinatio
 
             @Override
             public int compare(Combination o1, Combination o2) {
-                if (o1 == null) {
-                    if (o2 == null)
-                        return 0;
-
-                    //noinspection ConstantConditions
-                    return o2.compareTo(o1);
-                }
-                return o1.compareTo(o2);
+                return 0;
             }
         };
     }

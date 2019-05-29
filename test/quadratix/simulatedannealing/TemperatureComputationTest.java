@@ -26,7 +26,7 @@ public class TemperatureComputationTest {
 	private Function<Combination, Integer> f;
 	private Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> V;
 	private final NumberOperations<Integer> intOps = NumberOperations.getIntegerOperations();
-	private final int[] iterations = {1, 2, 3, 10, 20, 50, 100, 500, 1000/*, 2000, 5000, 10000, 100000*/};
+	private final int[] iterations = {1, 2, 3, 10, 20, 50, 100, 200, 300, 400, 500/*, 1000, 2000, 5000, 10000, 100000*/};
 	
 	private double computeTemperature(@NotNull final String filename, final int nbIteration) throws IOException {
 		AssignementProblem problem = new AssignementProblem();
