@@ -6,12 +6,14 @@ import quadratix.ElementaryFunction;
 import quadratix.SearchTestUtil;
 import quadratix.combination.Combination;
 import quadratix.data.CombinationGenerator;
+import quadratix.data.LogFileHandler;
 import quadratix.stats.Stopwatch;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
+import java.util.logging.FileHandler;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,8 +21,8 @@ class AssignementProblemTest {
 
     private AssignementProblem assignementProblem = new AssignementProblem();
 
-    private static final String TAILLARD = "tai12.txt";
-    private static final int NEIGHBORHOOD_TYPE = 0;
+    private static final String TAILLARD_FILENAME = "tai12.txt";
+    private static final int NEIGHBORHOOD_TYPE = 1;
     /*
             0 : toutes les permutations entre 2 élements
             1 : n permutations aléatoires ou n = taille de taillard
@@ -40,7 +42,7 @@ class AssignementProblemTest {
     @BeforeEach
     void setUp() {
         try {
-            assignementProblem.taillardInitializer(TAILLARD);
+            assignementProblem.taillardInitializer(TAILLARD_FILENAME);
             Combination initialComb = new Combination();
             for (int i = 0; i < assignementProblem.getAssignmentData().getLength(); i++) {
                 initialComb.add((long) i + 1);
@@ -53,17 +55,20 @@ class AssignementProblemTest {
     }
 
     /**
-     * Test 100 iterations for tabu algorithm. Compute average solution.
+     * Test 100 iterations for tabu algorithm. Compute average solution, best solution and time.
      */
     @Test
     void tabuAlgorithm() {
         try {
             float sum = 0;
             int min = Integer.MAX_VALUE;
+            int optimumReached = 0;
+            ArrayList<Integer> outputs = new ArrayList<>();
 
             CombinationGenerator combinationGenerator = new CombinationGenerator(assignementProblem.getAssignmentData().getLength());
             ArrayList<Combination> combinationArrayList = combinationGenerator.readFile();
 
+            Stopwatch stopwatch = new Stopwatch(true);
             for (Combination combination : combinationArrayList) {
                 assignementProblem.setInCombination(combination);
                 assignementProblem.tabuAlgortihm();
@@ -71,11 +76,19 @@ class AssignementProblemTest {
                 int output = assignementProblem.getF().apply(assignementProblem.getOutCombination());
                 sum += output;
                 if (output < min) min = output;
+                if (output == SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME)) optimumReached++;
+                outputs.add(output);
             }
+            stopwatch.stop();
+
+            LogFileHandler fileHandler = new LogFileHandler(assignementProblem.getAssignmentData().getLength());
+            fileHandler.writeLogs(outputs);
 
             System.out.println("\n");
             System.out.println("Average tabu " + sum / combinationArrayList.size());
             System.out.println("Minimum found " + min);
+            System.out.println("Optimum " + SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME) + " found " + optimumReached + " times");
+            System.out.println("Execution time " + stopwatch.elapsedMs() + " microsec");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,22 +103,33 @@ class AssignementProblemTest {
         try {
             float sum = 0;
             int min = Integer.MAX_VALUE;
+            int optimumReached = 0;
+            ArrayList<Integer> outputs = new ArrayList<>();
 
             CombinationGenerator combinationGenerator = new CombinationGenerator(assignementProblem.getAssignmentData().getLength());
             ArrayList<Combination> combinationArrayList = combinationGenerator.readFile();
 
+            Stopwatch stopwatch = new Stopwatch(true);
             for (Combination combination : combinationArrayList) {
                 assignementProblem.setInCombination(combination);
-                assignementProblem.recuitAlgortihm(null);
-                sum += assignementProblem.getF().apply(assignementProblem.getOutCombination());
+                assignementProblem.recuitAlgortihm();
+                assignementProblem.printOutput();
                 int output = assignementProblem.getF().apply(assignementProblem.getOutCombination());
                 sum += output;
                 if (output < min) min = output;
+                if (output == SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME)) optimumReached++;
+                outputs.add(output);
             }
+            stopwatch.stop();
+
+            LogFileHandler fileHandler = new LogFileHandler(assignementProblem.getAssignmentData().getLength());
+            fileHandler.writeLogs(outputs);
 
             System.out.println("\n");
             System.out.println("Average recuit " + sum / combinationArrayList.size());
             System.out.println("Minimum found " + min);
+            System.out.println("Optimum " + SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME) + " found " + optimumReached + " times");
+            System.out.println("Execution time " + stopwatch.elapsedMs() + " microsec");
 
         } catch (IOException e) {
             e.printStackTrace();
