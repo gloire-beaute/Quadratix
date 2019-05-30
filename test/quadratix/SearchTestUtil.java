@@ -25,7 +25,23 @@ public class SearchTestUtil {
 			"tai80.txt",
 			"tai100.txt",
 	};
-	
+
+	public static final HashMap<String, Integer> taillardOptima = new HashMap<>();
+	static {
+		taillardOptima.put("tai12.txt", 224416);
+		taillardOptima.put("tai15.txt", 388214);
+		taillardOptima.put("tai17.txt", 491812);
+		taillardOptima.put("tai20.txt", 703482);
+		taillardOptima.put("tai25.txt", 1167256);
+		taillardOptima.put("tai30.txt", 1818146);
+		taillardOptima.put("tai35.txt", 2422002);
+		taillardOptima.put("tai40.txt", 3139370);
+		taillardOptima.put("tai50.txt", 4938796);
+		taillardOptima.put("tai60.txt", 7205962);
+		taillardOptima.put("tai80.txt", 13499184);
+		taillardOptima.put("tai100.txt", 21044752);
+	}
+
 	@NotNull
 	@Contract(" -> new")
 	public static HashMap<Bits, Integer> getSlideExerciseMapFitness() {
