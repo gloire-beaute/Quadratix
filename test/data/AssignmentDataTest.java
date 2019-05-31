@@ -2,9 +2,7 @@ package data;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import quadratix.data.AssignmentData;
-
-import static org.junit.jupiter.api.Assertions.*;
+import quadratix.assignement.AssignmentData;
 
 class AssignmentDataTest {
 

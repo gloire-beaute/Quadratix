@@ -3,11 +3,10 @@ package quadratix.data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import quadratix.combination.Combination;
+import quadratix.combination.CombinationGenerator;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CombinationGeneratorTest {
 

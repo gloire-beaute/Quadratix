@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import quadratix.ElementaryFunction;
 import quadratix.NumberOperations;
 import quadratix.combination.Combination;
-import quadratix.data.AssignmentData;
 import quadratix.data.TaillardReader;
 import quadratix.neighborhood.Neighborhood;
 import quadratix.neighborhood.NeighborhoodFull;
@@ -104,28 +103,30 @@ public class AssignementProblem {
         System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
     }
 
-    public void recuitAlgortihm(@Nullable Double t0) {
+    public void recuitAlgortihm(@Nullable Double t0, Double mu) {
         simulatedAnnealing = new SimulatedAnnealing<>();
-        outCombination = simulatedAnnealing.search(
-                f,
-                inCombination,
-                V_combination,
-                intOps,
-                t0 == null ?
+        t0 = (t0 == null )?
                 SimulatedAnnealing.computeTemperature(
                         f,
                         V_combination,
                         intOps,
                         v -> Combination.generateRandom(getAssignmentData().getLength()),
                         i -> (double) i,
-                        10)
-                : t0,
+                        100)
+                : t0;
+        outCombination = simulatedAnnealing.search(
+                f,
+                inCombination,
+                V_combination,
+                intOps,
+                t0,
+               100,
                 100,
-                100,
-                0.1);
+                mu);
     }
+
     public void recuitAlgortihm() {
-        recuitAlgortihm(null);
+        recuitAlgortihm(null, 0.1);
     }
 
     //endregion

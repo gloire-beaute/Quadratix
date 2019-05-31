@@ -145,7 +145,7 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 			}
 			tk = mu * tk;
 		}
-		
+
 		return xmin;
 	}
 	
@@ -174,27 +174,9 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	                                               @NotNull final Function<Void, P> randomGenerator,
 	                                               @NotNull final Function<R, Double> rToDouble,
 	                                               final int nbIteration) {
-		ArrayList<R> deltaFs = new ArrayList<>(nbIteration);
-		
-		for (int i = 0; i < nbIteration; i++) {
-			// Generate randomly a combination
-			P x = randomGenerator.apply(null);
-			
-			// Generate all its neighbors
-			ArrayList<P> neighbors = new ArrayList<>(V.apply(x).keySet());
-			
-			if (!neighbors.isEmpty()) {
-				// Select the worst neighbor (s.t. f(neighbor) is the biggest)
-				P worstNeighbor = neighbors.get(0);
-				for (P neighbor : neighbors) {
-					if (rOperation.compare(f.apply(neighbor), f.apply(worstNeighbor)) > 0)
-						worstNeighbor = neighbor;
-				}
-				// Compute deltaF
-				deltaFs.add(rOperation.abs(rOperation.minus(f.apply(x), f.apply(worstNeighbor))));
-			}
-		}
-		
+
+		ArrayList<R> deltaFs = computeDeltaTemperatures(f, V, rOperation, randomGenerator, nbIteration);
+
 		// Compute the average of deltaF's
 		double avg;
 		try {
@@ -206,7 +188,78 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 		// Compute t0 with a probability to accept neighbors of 80%
 		return - avg/Math.log(0.8);
 	}
-	
+
+	/**
+	 * Compute an approximation of the most optimal initial n1 with t0.
+	 * @param f The fitness function.
+	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
+	 *          -&gt; x'), and the invert function (x' -&gt; x).
+	 * @param rOperation The operations we can apply on `R`.
+	 * @param randomGenerator A function that return a random element of `P` at each call.
+	 * @param rToDouble A function that convert an element of type `R` to a real number ({@code double}).
+	 * @param nbIteration Number of iterations. The larger, the more accurate the computation will be.
+	 * @param t0 Initial temperature
+	 * @param mu Decrease factor of temperature t0
+	 * @param <P> Denotes the parameter type of the fitness function, that can be any elements (bits, combination, number,
+	 *            ...).
+	 * @param <R> represents the return type of the fitness function. It is often a number (integer or real).
+	 * @return Return t0.
+	 * @see #search(Function, Object, Function, NumberOperations, double, int, int, double)
+	 * @see java.util.stream.Stream
+	 * @see java.util.stream.Stream#mapToDouble(ToDoubleFunction)
+	 * @see java.util.stream.DoubleStream
+	 * @see java.util.stream.DoubleStream#average()
+	 */
+	public static <P, R> Integer computeN1(final @NotNull Function<P, R> f,
+	                                               @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V,
+	                                               @NotNull final NumberOperations<R> rOperation,
+	                                               @NotNull final Function<Void, P> randomGenerator,
+	                                               @NotNull final Function<R, Double> rToDouble,
+	                                               @NotNull final Double t0,
+	                                               @NotNull final Double mu,
+	                                               final int nbIteration) {
+		ArrayList<R> deltaFs = computeDeltaTemperatures(f, V, rOperation, randomGenerator, nbIteration);
+
+		// Compute the average of deltaF's
+		double avg;
+		try {
+			avg = deltaFs.stream().mapToDouble(rToDouble::apply).average().getAsDouble();
+		} catch (NoSuchElementException ex) {
+			throw new IllegalArgumentException("Cannot compute the average for n1.", ex);
+		}
+
+		// Compute n1 with a probability to accept same solution of 1%
+        Double n = (Math.log(-avg/(t0*Math.log(0.01)))/Math.log(mu));
+		return n.intValue();
+	}
+
+
+	@NotNull
+	private static <P, R> ArrayList<R> computeDeltaTemperatures(@NotNull Function<P, R> f, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, @NotNull Function<Void, P> randomGenerator, int nbIteration) {
+		ArrayList<R> deltaFs = new ArrayList<>(nbIteration);
+
+		for (int i = 0; i < nbIteration; i++) {
+			// Generate randomly a combination
+			P x = randomGenerator.apply(null);
+
+			// Generate all its neighbors
+			ArrayList<P> neighbors = new ArrayList<>(V.apply(x).keySet());
+
+			if (!neighbors.isEmpty()) {
+				// Select the worst neighbor (s.t. f(neighbor) is the biggest)
+				P worstNeighbor = neighbors.get(0);
+				for (P neighbor : neighbors) {
+					if (rOperation.compare(f.apply(neighbor), f.apply(worstNeighbor)) > 0)
+						worstNeighbor = neighbor;
+				}
+				// Compute deltaF
+				deltaFs.add(rOperation.abs(rOperation.minus(f.apply(x), f.apply(worstNeighbor))));
+			}
+		}
+		return deltaFs;
+	}
+
+
 	//region GETTERS & SETTERS
 	
 	@Contract(pure = true)

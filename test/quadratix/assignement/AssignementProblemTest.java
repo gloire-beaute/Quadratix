@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import quadratix.ElementaryFunction;
 import quadratix.SearchTestUtil;
 import quadratix.combination.Combination;
-import quadratix.data.CombinationGenerator;
+import quadratix.combination.CombinationGenerator;
 import quadratix.data.LogFileHandler;
 import quadratix.stats.Stopwatch;
 
@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
-import java.util.logging.FileHandler;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,8 +29,9 @@ class AssignementProblemTest {
      */
 
     // RECUIT
-    private static final int MAX_ITERATION_COMPUTE_T0 = 10;
-    private static final Integer INITIAL_TO = null;
+    private static final int MAX_ITERATION_COMPUTE_T0 = 100;
+    private static final Double INITIAL_TO = null; // if null => t0 will be auto-computed by recuit algorithm
+    private static final Double MU = 0.1;
 
     // TABU
     private static final int TABU_SIZE = 3;
@@ -59,6 +59,7 @@ class AssignementProblemTest {
      */
     @Test
     void tabuAlgorithm() {
+        System.out.println("\nTabu algorithm test on 100 solutions\n");
         try {
             float sum = 0;
             int min = Integer.MAX_VALUE;
@@ -100,6 +101,7 @@ class AssignementProblemTest {
      */
     @Test
     void recuitAlgorithm() {
+        System.out.println("\nRecuit algorithm test on 100 solutions\n");
         try {
             float sum = 0;
             int min = Integer.MAX_VALUE;
@@ -112,7 +114,7 @@ class AssignementProblemTest {
             Stopwatch stopwatch = new Stopwatch(true);
             for (Combination combination : combinationArrayList) {
                 assignementProblem.setInCombination(combination);
-                assignementProblem.recuitAlgortihm();
+                assignementProblem.recuitAlgortihm(INITIAL_TO, MU);
                 assignementProblem.printOutput();
                 int output = assignementProblem.getF().apply(assignementProblem.getOutCombination());
                 sum += output;
@@ -153,7 +155,8 @@ class AssignementProblemTest {
 
         System.out.println("RECUIT algorithm");
         stopwatch = new Stopwatch(true);
-        assignementProblem.recuitAlgortihm();
+        assignementProblem.recuitAlgortihm(INITIAL_TO, MU);
+        assignementProblem.printOutput();
         stopwatch.stop();
         System.out.println("Execution time : " + stopwatch.elapsedMs() + " microsec");
         System.out.println("\n");
@@ -195,43 +198,16 @@ class AssignementProblemTest {
         System.out.println(String.format("t0 = %.4f°", t0));
     }
 
-    /**
-     * Test tabu list size impact
-     */
-    @Test
-    public void tabuSizeTest() {
-        try {
-
-            for (int i = 0; i < /*SearchTestUtil.taillardFilenames.length*/ 4; i++) {
-                System.out.println("-----------------");
-                System.out.println("Run#" + i + " " + SearchTestUtil.taillardFilenames[i]);
-                System.out.println("-----------------");
-                assignementProblem.taillardInitializer(SearchTestUtil.taillardFilenames[i]);
-
-                for (int j = 1; j < Math.pow(assignementProblem.getAssignmentData().getLength(), 2); j = j + 9) {
-                    System.out.println("Tabu size " + j);
-                    assignementProblem.setTabuSize(j);
-
-                    assignementProblem.setInCombination(Combination.generateRandom(assignementProblem.getAssignmentData().getLength()));
-
-                    assignementProblem.tabuAlgortihm();
-
-                    assignementProblem.tabuAlgortihm(assignementProblem.getF().apply(assignementProblem.getOutCombination()));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Compute all results for each taillard instance
      */
     @Test
     public void taillardTest() {
+        System.out.println("\nRecuit and tabu algorithms on each Taillard\n");
         try {
 
-            for (int i = 0; i < /*SearchTestUtil.taillardFilenames.length*/ 9; i++) {
+            for (int i = 0; i < /*SearchTestUtil.taillardFilenames.length*/ 5; i++) {
                 System.out.println("Run#" + SearchTestUtil.taillardFilenames[i]);
                 assignementProblem.taillardInitializer(SearchTestUtil.taillardFilenames[i]);
 
@@ -247,11 +223,81 @@ class AssignementProblemTest {
 
                 //RECUIT
                 stopwatch = new Stopwatch(true);
-                assignementProblem.recuitAlgortihm();
+                assignementProblem.recuitAlgortihm(INITIAL_TO, MU);
                 stopwatch.stop();
                 System.out.print("Recuit ");
                 System.out.print(" Best " + assignementProblem.getF().apply(assignementProblem.getOutCombination()));
                 System.out.println(" | Time " + stopwatch.elapsedMs() + " ms");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Test tabu list size impact
+     */
+    @Test
+    public void tabuSizeTest() {
+        try {
+
+            for (int i = 0; i < /*SearchTestUtil.taillardFilenames.length*/ 2; i++) {
+                System.out.println("-----------------");
+                System.out.println("Run#" + i + " " + SearchTestUtil.taillardFilenames[i]);
+                System.out.println("-----------------");
+                assignementProblem.taillardInitializer(SearchTestUtil.taillardFilenames[i]);
+
+                assignementProblem.setInCombination(Combination.generateRandom(assignementProblem.getAssignmentData().getLength()));
+
+                for (int j = 1; j < Math.pow(assignementProblem.getAssignmentData().getLength(), 2); j = j + 9) {
+                    System.out.println("Tabu size " + j);
+                    assignementProblem.setTabuSize(j);
+
+                    assignementProblem.tabuAlgortihm();
+
+                    assignementProblem.tabuAlgortihm(assignementProblem.getF().apply(assignementProblem.getOutCombination()));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test temperature variation impact
+     */
+    @Test
+    public void muVariationTest() {
+        try {
+
+            for (double i = 0; i <= 1; i = i + 0.1) {
+                System.out.println("\n#Run mu = " + i);
+                float sum = 0;
+                int min = Integer.MAX_VALUE;
+                int optimumReached = 0;
+                ArrayList<Integer> outputs = new ArrayList<>();
+
+                CombinationGenerator combinationGenerator = new CombinationGenerator(assignementProblem.getAssignmentData().getLength());
+                ArrayList<Combination> combinationArrayList = combinationGenerator.readFile();
+
+                Stopwatch stopwatch = new Stopwatch(true);
+                for (Combination combination : combinationArrayList) {
+                    assignementProblem.setInCombination(combination);
+                    assignementProblem.recuitAlgortihm(INITIAL_TO, i); // mu variation
+                    int output = assignementProblem.getF().apply(assignementProblem.getOutCombination());
+                    sum += output;
+                    if (output < min) min = output;
+                    if (output == SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME)) optimumReached++;
+                }
+                stopwatch.stop();
+
+                System.out.println("Average recuit " + sum / combinationArrayList.size());
+                System.out.println("Minimum found " + min);
+                System.out.println("Optimum " + SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME) + " found " + optimumReached + " times");
+                System.out.println("Execution time " + stopwatch.elapsedMs() + " microsec");
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();

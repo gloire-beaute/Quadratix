@@ -1,6 +1,7 @@
 package quadratix.data;
 
 import org.junit.jupiter.api.Test;
+import quadratix.assignement.AssignmentData;
 
 import java.io.IOException;
 

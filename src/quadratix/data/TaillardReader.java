@@ -1,9 +1,10 @@
 package quadratix.data;
 
 import javafx.util.Pair;
+import quadratix.assignement.AssignmentData;
+import quadratix.assignement.AssignmentDataException;
 
 import java.io.*;
-import java.util.Arrays;
 
 public class TaillardReader {
 
