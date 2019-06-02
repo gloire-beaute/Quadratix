@@ -215,9 +215,9 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 	                                               @NotNull final NumberOperations<R> rOperation,
 	                                               @NotNull final Function<Void, P> randomGenerator,
 	                                               @NotNull final Function<R, Double> rToDouble,
-	                                               @NotNull final Double t0,
-	                                               @NotNull final Double mu,
-	                                               final int nbIteration) {
+	                                               final double t0,
+	                                               final double mu,
+	                                               final int nbIteration) throws IllegalArgumentException {
 		ArrayList<R> deltaFs = computeDeltaTemperatures(f, V, rOperation, randomGenerator, nbIteration);
 
 		// Compute the average of deltaF's
@@ -229,13 +229,29 @@ public class SimulatedAnnealing<P, R extends Number> implements ISearch<P, R> {
 		}
 
 		// Compute n1 with a probability to accept same solution of 1%
-        Double n = (Math.log(-avg/(t0*Math.log(0.01)))/Math.log(mu));
-		return n.intValue();
+        double n = Math.log(-avg/(t0 * Math.log(0.01))) / Math.log(mu);
+		return (int) Math.ceil(n);
 	}
-
-
+	
+	/**
+	 * Compute multiple Δf for the temperatures computed from random elements.
+	 * @param f The fitness function.
+	 * @param V A function that maps an element `P` to a list of neighbors associated with their function to find it (x
+	 *          -&gt; x'), and the invert function (x' -&gt; x).
+	 * @param rOperation The operations we can apply on `R`.
+	 * @param randomGenerator A function that return a random element of `P` at each call.
+	 * @param nbIteration Number of iterations. The larger, the more accurate the computation will be.
+	 * @param <P> Denotes the parameter type of the fitness function, that can be any elements (bits, combination, number,
+	 *            ...).
+	 * @param <R> represents the return type of the fitness function. It is often a number (integer or real).
+	 * @return Return a list containing multiple Δf.
+	 */
 	@NotNull
-	private static <P, R> ArrayList<R> computeDeltaTemperatures(@NotNull Function<P, R> f, @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull NumberOperations<R> rOperation, @NotNull Function<Void, P> randomGenerator, int nbIteration) {
+	private static <P, R> ArrayList<R> computeDeltaTemperatures(@NotNull Function<P, R> f,
+	                                                            @NotNull Function<P, HashMap<P, ElementaryFunction<P>>> V,
+	                                                            @NotNull NumberOperations<R> rOperation,
+	                                                            @NotNull Function<Void, P> randomGenerator,
+	                                                            int nbIteration) {
 		ArrayList<R> deltaFs = new ArrayList<>(nbIteration);
 
 		for (int i = 0; i < nbIteration; i++) {
