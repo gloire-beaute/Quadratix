@@ -106,7 +106,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 			// Now, {m(xi) | m∈T} must be removed from it.
 			for (Function<P, P> m : T)
 				C.remove(m.apply(x.get(i)));
-			
+
 			if (!C.isEmpty()) {
 				/* Choose y in C s.t. f(y) = min({f(z) | z∈C}) */
 				
@@ -154,7 +154,9 @@ public class Tabu<P, R> implements ISearch<P, R> {
 		} while (i < maxIteration && !C.isEmpty());
 
 		if(firstIteration!= -1) {
-			System.out.println("Optima found at iteration " + firstIteration);
+			System.out.println("Optima BFK reached at iteration " + firstIteration);
+		}else if(optima != null){
+			System.out.println("Optima BFK not reached");
 		}
 		return xmin;
 	}
