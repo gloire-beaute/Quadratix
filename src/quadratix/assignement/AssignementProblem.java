@@ -25,14 +25,9 @@ public class AssignementProblem {
     private Combination outCombination = new Combination();
     private Neighborhood neighborhood = new Neighborhood(new NeighborhoodFull());
 
-    private Tabu<Combination, Integer> tabu;
-    private SimulatedAnnealing<Combination, Integer> simulatedAnnealing;
     private Function<Combination, Integer> f; //fitness
     private Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> V_combination;
     private NumberOperations<Integer> intOps = NumberOperations.getIntegerOperations();
-
-    private ArrayList<Combination> initValuesToTest = new ArrayList<>();
-    private int tabuSize = 3;
 
     public AssignementProblem() {}
 
@@ -49,7 +44,7 @@ public class AssignementProblem {
         this.setup();
     }
 
-    public void customInitializer(@NotNull int length, @NotNull HashMap<Pair<Long, Long>, Long> weights,
+    public void customInitializer(@NotNull Integer length, @NotNull HashMap<Pair<Long, Long>, Long> weights,
                                   @NotNull HashMap<Pair<Long, Long>, Long> distance) {
         this.assignmentData = new AssignmentData(length, weights, distance);
         this.setup();
@@ -63,11 +58,11 @@ public class AssignementProblem {
         return assignmentData;
     }
 
-    public Combination getOutCombination() {
+    Combination getOutCombination() {
         return outCombination;
     }
 
-    public void setInCombination(Combination inCombination) {
+    void setInCombination(Combination inCombination) {
         this.inCombination = inCombination;
     }
 
@@ -79,33 +74,21 @@ public class AssignementProblem {
         return V_combination;
     }
 
-    public void setV_combination(Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> v_combination) {
-        V_combination = v_combination;
-    }
-
-    public void setTabuSize(int tabuSize) {
-        this.tabuSize = tabuSize;
-    }
-
     //endregion
 
     // Algorithms
     // region
-    public void tabuAlgortihm(@Nullable Integer optima) {
-        tabu = new Tabu<>();
-        outCombination = tabu.search(f, inCombination, V_combination, intOps, this.tabuSize, optima);
+    public void tabuAlgortihm(@Nullable Integer optima, Integer tabuSize) {
+        Tabu<Combination, Integer> tabu = new Tabu<>();
+        outCombination = tabu.search(f, inCombination, V_combination, intOps, tabuSize,1000*this.assignmentData.getLength(), optima);
     }
 
     public void tabuAlgortihm() {
-       this.tabuAlgortihm(null);
-    }
-
-    public void printOutput(){
-        System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
+       this.tabuAlgortihm(null, this.assignmentData.getLength());
     }
 
     public void recuitAlgortihm(@Nullable Double t0) {
-        simulatedAnnealing = new SimulatedAnnealing<>();
+        SimulatedAnnealing<Combination, Integer> simulatedAnnealing = new SimulatedAnnealing<>();
         outCombination = simulatedAnnealing.search(
                 f,
                 inCombination,
@@ -124,8 +107,13 @@ public class AssignementProblem {
                 100,
                 0.1);
     }
+
     public void recuitAlgortihm() {
         recuitAlgortihm(null);
+    }
+
+    public void printOutput(){
+        System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
     }
 
     //endregion
@@ -143,7 +131,7 @@ public class AssignementProblem {
         };
     }
 
-    public void setNeighborsFunction(int type, int param){
+    void setNeighborsFunction(int type, int param){
         neighborhood.switchState(type, param);
         V_combination = neighborhood.getAllNeighborhoods();
     }

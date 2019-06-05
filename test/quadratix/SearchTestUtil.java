@@ -26,6 +26,11 @@ public class SearchTestUtil {
 			"tai100.txt",
 	};
 
+	public enum ALGO{
+		RECUIT,
+		TABU
+	}
+
 	public static final HashMap<String, Integer> taillardOptima = new HashMap<>();
 	static {
 		taillardOptima.put("tai12.txt", 224416);
