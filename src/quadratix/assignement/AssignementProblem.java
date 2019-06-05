@@ -86,12 +86,8 @@ public class AssignementProblem {
        this.tabuAlgortihm(null, this.assignmentData.getLength());
     }
 
-    public void printOutput(){
-        System.out.println("Result: f(" + outCombination + ") = " + f.apply(outCombination));
-    }
-
-    public void recuitAlgortihm(@Nullable Double t0) {
-        simulatedAnnealing = new SimulatedAnnealing<>();
+    public void recuitAlgortihm(@Nullable Double t0, Double mu) {
+        SimulatedAnnealing<Combination, Integer> simulatedAnnealing = new SimulatedAnnealing<>();
         t0 = (t0 == null)?
                 SimulatedAnnealing.computeTemperature(
                         f,

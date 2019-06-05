@@ -195,24 +195,6 @@ class AssignementProblemTest {
     }
 
 
-    @Test
-    void taillardTest() {
-        // TODO DEBUG
-        try {
-
-            for (int i = 0; i < /*SearchTestUtil.taillardFilenames.length*/ 9; i++) {
-                System.out.println("Run#" + SearchTestUtil.taillardFilenames[i]);
-                assignementProblem.taillardInitializer(SearchTestUtil.taillardFilenames[i]);
-                assignementProblem.setInCombination(Combination.generateRandom(assignementProblem.getAssignmentData().getLength()));
-                executeAlgo(SearchTestUtil.ALGO.TABU);
-                executeAlgo(SearchTestUtil.ALGO.RECUIT);
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Execute choosen algorithm on current taillard instance
      * @param algo enum algo recuit or tabu
@@ -246,7 +228,7 @@ class AssignementProblemTest {
             Stopwatch stopwatch = new Stopwatch(true);
             for (Combination combination : combinationArrayList) {
                 assignementProblem.setInCombination(combination);
-                if(algo.equals(SearchTestUtil.ALGO.RECUIT)) assignementProblem.recuitAlgortihm(INITIAL_To, MU);
+                if(algo.equals(SearchTestUtil.ALGO.RECUIT)) assignementProblem.recuitAlgortihm(INITIAL_TO, MU);
                 else assignementProblem.tabuAlgortihm(optima, tabuSize); //parameter optima, to know the convergence
                 assignementProblem.printOutput();
                 int output = assignementProblem.getF().apply(assignementProblem.getOutCombination());
