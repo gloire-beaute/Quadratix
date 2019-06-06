@@ -80,7 +80,7 @@ public class AssignementProblem {
     // region
     public void tabuAlgortihm(@Nullable Integer optima, Integer tabuSize) {
         Tabu<Combination, Integer> tabu = new Tabu<>();
-        outCombination = tabu.search(f, inCombination, V_combination, intOps, tabuSize,1000*this.assignmentData.getLength(), optima);
+        outCombination = tabu.search(f, inCombination, V_combination, intOps, tabuSize,100*this.assignmentData.getLength(), optima);
     }
 
     public void tabuAlgortihm() {
