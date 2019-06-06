@@ -23,9 +23,9 @@ class AssignementProblemTest {
     private static final String TAILLARD_FILENAME = "tai12.txt";
 
     /**
-     *  0 : toutes les permutations entre 2 élements
-     *  1 : n permutations aléatoires ou n = taille de taillard
-     *  2 : toutes les permutations entre 2 élements à moins de d de distance ou d à fixer
+     * 0 : toutes les permutations entre 2 élements
+     * 1 : n permutations aléatoires ou n = taille de taillard
+     * 2 : toutes les permutations entre 2 élements à moins de d de distance ou d à fixer
      */
     private static final int NEIGHBORHOOD_TYPE = 1; // 0,1,2
 
@@ -133,7 +133,7 @@ class AssignementProblemTest {
 
                 for (int j = 1; j < Math.pow(assignementProblem.getAssignmentData().getLength(), 2); j = j + 9) {
                     System.out.println("Tabu size " + j);
-                    assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME),j); //parameter optima, to know the convergence
+                    assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME), j); //parameter optima, to know the convergence
                 }
             }
         } catch (IOException e) {
@@ -142,7 +142,7 @@ class AssignementProblemTest {
     }
 
     @Test
-    void tabuSizeTestCurrentTaillard(){
+    void tabuSizeTestCurrentTaillard() {
 
         Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
         assignementProblem.setInCombination(inComb);
@@ -159,12 +159,12 @@ class AssignementProblemTest {
      */
     @Test
     void taillardTest() {
-        // TODO DEBUG
         try {
 
-            for (int i = 0; i < /*SearchTestUtil.taillardFilenames.length*/ 9; i++) {
+            for (int i = 0; i < SearchTestUtil.taillardFilenames.length; i++) {
                 System.out.println("Run#" + SearchTestUtil.taillardFilenames[i]);
                 assignementProblem.taillardInitializer(SearchTestUtil.taillardFilenames[i]);
+                assignementProblem.setNeighborsFunction(NEIGHBORHOOD_TYPE, assignementProblem.getAssignmentData().getLength());
                 assignementProblem.setInCombination(Combination.generateRandom(assignementProblem.getAssignmentData().getLength()));
                 executeAlgo(SearchTestUtil.ALGO.TABU);
                 executeAlgo(SearchTestUtil.ALGO.RECUIT);
@@ -176,15 +176,60 @@ class AssignementProblemTest {
     }
 
     /**
+     * Compute all results for each taillard instance
+     */
+    @Test
+    void taillardTestMoreIterations() {
+        try {
+
+            for (int i = 0; i < SearchTestUtil.taillardFilenames.length; i++) {
+                int output;
+                float sumTabu = 0;
+                int minTabu = Integer.MAX_VALUE;
+                float sumRecuit = 0;
+                int minRecuit = Integer.MAX_VALUE;
+                System.out.println("Run#" + SearchTestUtil.taillardFilenames[i]);
+                assignementProblem.taillardInitializer(SearchTestUtil.taillardFilenames[i]);
+                assignementProblem.setNeighborsFunction(NEIGHBORHOOD_TYPE, assignementProblem.getAssignmentData().getLength());
+                for (int j = 0; j < 10; j++) {
+                    assignementProblem.setInCombination(Combination.generateRandom(assignementProblem.getAssignmentData().getLength()));
+
+                    System.out.println("\n \t Test#"+j);
+                    executeAlgo(SearchTestUtil.ALGO.TABU);
+                    output = assignementProblem.getF().apply(assignementProblem.getOutCombination());
+                    sumTabu += output;
+                    if (output < minTabu) minTabu = output;
+
+                    executeAlgo(SearchTestUtil.ALGO.RECUIT);
+                    output = assignementProblem.getF().apply(assignementProblem.getOutCombination());
+                    sumRecuit += output;
+                    if (output < minRecuit) minRecuit = output;
+                }
+
+
+                System.out.println("\tAverage tabu " + sumTabu / 10);
+                System.out.println("\tMinimum found " + minTabu);
+
+                System.out.println("\tAverage recuit " + sumRecuit / 10);
+                System.out.println("\tMinimum found " + minRecuit);
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Execute choosen algorithm on current taillard instance
+     *
      * @param algo enum algo recuit or tabu
      */
-    private void executeAlgo(SearchTestUtil.ALGO algo){
+    private void executeAlgo(SearchTestUtil.ALGO algo) {
         Stopwatch stopwatch = new Stopwatch(true);
-        if(algo.equals(SearchTestUtil.ALGO.RECUIT)) assignementProblem.recuitAlgortihm();
+        if (algo.equals(SearchTestUtil.ALGO.RECUIT)) assignementProblem.recuitAlgortihm();
         else assignementProblem.tabuAlgortihm();
         stopwatch.stop();
-        System.out.print(algo.toString());
+        System.out.print("\t" + algo.toString());
         System.out.print(" Best " + assignementProblem.getF().apply(assignementProblem.getOutCombination()));
         System.out.println(" | Time " + stopwatch.elapsedMs() + " ms");
     }
@@ -192,9 +237,10 @@ class AssignementProblemTest {
     /**
      * Test 100 iterations for choosen algorithm. Compute average solution, best solution and time.
      * Save result in log file
+     *
      * @param algo enum algo recuit or tabu
      */
-    private void executeAlgoRangeOfValues(SearchTestUtil.ALGO algo, AssignementProblem assignementProblem, Integer tabuSize, Integer optima){
+    private void executeAlgoRangeOfValues(SearchTestUtil.ALGO algo, AssignementProblem assignementProblem, Integer tabuSize, Integer optima) {
         try {
             float sum = 0;
             int min = Integer.MAX_VALUE;
@@ -208,7 +254,7 @@ class AssignementProblemTest {
             Stopwatch stopwatch = new Stopwatch(true);
             for (Combination combination : combinationArrayList) {
                 assignementProblem.setInCombination(combination);
-                if(algo.equals(SearchTestUtil.ALGO.RECUIT)) assignementProblem.recuitAlgortihm();
+                if (algo.equals(SearchTestUtil.ALGO.RECUIT)) assignementProblem.recuitAlgortihm();
                 else assignementProblem.tabuAlgortihm(optima, tabuSize); //parameter optima, to know the convergence
                 assignementProblem.printOutput();
                 int output = assignementProblem.getF().apply(assignementProblem.getOutCombination());
