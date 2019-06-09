@@ -81,7 +81,6 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, final int maxIteration, @Nullable R optima) {
 		int firstIteration = -1;
 		fitnessCall.reset();
-		int oldTsize = 0;//TODO: DEBUG
 		TabuList<P, P> T = new TabuList<>(tabuSize);
 		
 		/**
@@ -152,24 +151,6 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				// Increment the number of iteration
 				i++;
 			}
-			
-			// TODO: DEBUG
-			// Print the number of elements in the tabu list if it has changed since last print.
-//			if (oldTsize != T.size()) {
-//				System.out.println("T size: " + T.size() + "/" + T.getFixedSize());
-//				oldTsize = T.size();
-//			}
-			
-			// TODO: DEBUG
-			// Print duplicates in tabu list
-//			int[] results = T.stream()
-//					.mapToInt(e -> Collections.frequency(T, e))
-//					.filter(e -> e > 1)
-//					.distinct()
-//					.toArray();
-//
-//			if (results.length > 0)
-//				System.out.println("Duplicates found in T: " + Arrays.toString(results) + " (" + results.length + " element" + (results.length > 1 ? "s" : "") + ")");
 		} while (i < maxIteration && !C.isEmpty());
 		
 		if (firstIteration != -1) {
