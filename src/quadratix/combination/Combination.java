@@ -48,6 +48,7 @@ public class Combination extends Vector<Long> implements Randomizable<Combinatio
      * @param j Index of the second element to swap.
      */
     public void swap(int i, int j) {
+        if (i == j) return;
         Long li = get(i);
         set(i, get(j));
         set(j, li);
