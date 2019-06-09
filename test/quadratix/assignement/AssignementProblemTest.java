@@ -143,15 +143,22 @@ class AssignementProblemTest {
 
     @Test
     void tabuSizeTestCurrentTaillard() {
-
         Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
         assignementProblem.setInCombination(inComb);
-        for (int j = 1; j < assignementProblem.getAssignmentData().getLength(); j = j + 1) {
-            System.out.println("Tabu size " + j);
-            assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME), j); //parameter optima, to know the convergence
+        
+        int[] sizes = {1, 2, 3, 10, 100, 1000, 10000};
+        ArrayList<Integer> optima = new ArrayList<>(sizes.length);
+        for (int size : sizes) {
+            System.out.println("Tabu size " + size);
+            assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME), size); //parameter optima, to know the convergence
+            optima.add(assignementProblem.getF().apply(assignementProblem.getOutCombination()));
             assignementProblem.printOutput();
-            System.out.println("\n");
+            System.out.println();
         }
+    
+        double average = optima.stream().mapToInt(Integer::intValue).average().orElse(0d);
+        System.out.println("Average: " + average);
+        System.out.println("Standard Deviation: " + Math.sqrt(optima.stream().mapToDouble(x -> Math.pow(Math.abs(x - average), 2)).sum() / (double) optima.size()));
     }
 
     /**
