@@ -1,5 +1,6 @@
 package quadratix.assignement;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import quadratix.ElementaryFunction;
@@ -122,7 +123,7 @@ class AssignementProblemTest {
      * Test tabu list size impact
      */
     @Test
-    void tabuSizeTest() {
+    void tabuSizeTest() throws IOException {
         for (String taillardFilename : SearchTestUtil.taillardFilenames) {
             System.out.println("-----------------");
             System.out.println("Run " + taillardFilename);
@@ -132,7 +133,7 @@ class AssignementProblemTest {
     }
 
     @Test
-    void tabuSizeTestCurrentTaillard() {
+    void tabuSizeTestCurrentTaillard() throws IOException {
         ArrayList<Integer> optima = new ArrayList<>(tabuSizeTestWith(TAILLARD_FILENAME).keySet());
     
         double average = optima.stream().mapToInt(Integer::intValue).average().orElse(0d);
@@ -145,7 +146,7 @@ class AssignementProblemTest {
      * @param taillardFilename The taillard filename.
      * @return Return a map where the keys are the tabu sizes and the values are the optima found.
      */
-    private HashMap<Integer, Integer> tabuSizeTestWith(String taillardFilename) {
+    private HashMap<Integer, Integer> tabuSizeTestWith(@NotNull String taillardFilename) throws IOException {
         Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
         assignementProblem.setInCombination(inComb);
         
@@ -153,13 +154,44 @@ class AssignementProblemTest {
         HashMap<Integer, Integer> optima = new HashMap<>(sizes.length);
         for (int size : sizes) {
             System.out.println("Tabu size " + size);
-            assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME), size); //parameter optima, to know the convergence
+	        assignementProblem.taillardInitializer(taillardFilename);
+            assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(taillardFilename), size); //parameter optima, to know the convergence
             optima.put(size, assignementProblem.getF().apply(assignementProblem.getOutCombination()));
             assignementProblem.printOutput();
             System.out.println();
         }
         
         return optima;
+    }
+    
+    @Test
+    void neighborhoodTypeTest() throws IOException {
+	    for (String taillardFilename : SearchTestUtil.taillardFilenames) {
+		    System.out.println("-----------------");
+		    System.out.println("Run " + taillardFilename);
+		    System.out.println("-----------------");
+		    neighborhoodTypeTestWith(taillardFilename);
+	    }
+    }
+    
+	/**
+	 * Execute the tabu algorithm with different neighborhood types.
+	 * @param taillardFilename The taillard filename.
+	 */
+    private void neighborhoodTypeTestWith(@NotNull String taillardFilename) throws IOException {
+	    Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
+	    assignementProblem.setInCombination(inComb);
+	
+	    int[] neighborhoodTypes = {0, 1, 2};
+	    for (int neighborhoodType : neighborhoodTypes) {
+		    System.out.println("Neighborhood type: " + neighborhoodType);
+		    assignementProblem.taillardInitializer(taillardFilename);
+		    assignementProblem.setNeighborsFunction(NEIGHBORHOOD_TYPE, assignementProblem.getAssignmentData().getLength());
+		    assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(taillardFilename), TABU_SIZE); //parameter optima, to know the convergence
+		    //optima.put(size, assignementProblem.getF().apply(assignementProblem.getOutCombination()));
+		    assignementProblem.printOutput();
+		    System.out.println();
+	    }
     }
 
     /**
