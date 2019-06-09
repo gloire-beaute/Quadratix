@@ -14,7 +14,6 @@ import quadratix.simulatedannealing.SimulatedAnnealing;
 import quadratix.tabu.Tabu;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Function;
 
@@ -36,8 +35,7 @@ public class AssignementProblem {
         this.setNeighborsFunction(0, 15);
     }
 
-    // Initializer
-    // region
+    //region Initializer
     public void taillardInitializer(@NotNull String filename) throws IOException {
         TaillardReader taillardReader = new TaillardReader(filename);
         this.assignmentData = taillardReader.createAssignementData();
@@ -52,8 +50,7 @@ public class AssignementProblem {
 
     //endregion
 
-    // Getters - Setters
-    // region
+    //region Getters - Setters
     public AssignmentData getAssignmentData() {
         return assignmentData;
     }
@@ -76,9 +73,9 @@ public class AssignementProblem {
 
     //endregion
 
-    // Algorithms
-    // region
-    public void tabuAlgortihm(@Nullable Integer optima, Integer tabuSize) {
+    //region Algorithms
+    
+    public void tabuAlgortihm(@Nullable Integer optima, int tabuSize) {
         Tabu<Combination, Integer> tabu = new Tabu<>();
         outCombination = tabu.search(f, inCombination, V_combination, intOps, tabuSize,100*this.assignmentData.getLength(), optima);
     }

@@ -123,35 +123,43 @@ class AssignementProblemTest {
      */
     @Test
     void tabuSizeTest() {
-        try {
-            for (int i = 0; i < /*SearchTestUtil.taillardFilenames.length*/ 4; i++) {
-                System.out.println("-----------------");
-                System.out.println("Run#" + i + " " + SearchTestUtil.taillardFilenames[i]);
-                System.out.println("-----------------");
-                assignementProblem.taillardInitializer(SearchTestUtil.taillardFilenames[i]);
-                assignementProblem.setInCombination(Combination.generateRandom(assignementProblem.getAssignmentData().getLength()));
-
-                for (int j = 1; j < Math.pow(assignementProblem.getAssignmentData().getLength(), 2); j = j + 9) {
-                    System.out.println("Tabu size " + j);
-                    assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME), j); //parameter optima, to know the convergence
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String taillardFilename : SearchTestUtil.taillardFilenames) {
+            System.out.println("-----------------");
+            System.out.println("Run " + taillardFilename);
+            System.out.println("-----------------");
+            tabuSizeTestWith(taillardFilename);
         }
     }
 
     @Test
     void tabuSizeTestCurrentTaillard() {
-
+        ArrayList<Integer> optima = new ArrayList<>(tabuSizeTestWith(TAILLARD_FILENAME).keySet());
+    
+        double average = optima.stream().mapToInt(Integer::intValue).average().orElse(0d);
+        System.out.println("Average: " + average);
+        System.out.println("Standard Deviation: " + Math.sqrt(optima.stream().mapToDouble(x -> Math.pow(Math.abs(x - average), 2)).sum() / (double) optima.size()));
+    }
+    
+    /**
+     * Execute the tabu algorithm with different tabu list size.
+     * @param taillardFilename The taillard filename.
+     * @return Return a map where the keys are the tabu sizes and the values are the optima found.
+     */
+    private HashMap<Integer, Integer> tabuSizeTestWith(String taillardFilename) {
         Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
         assignementProblem.setInCombination(inComb);
-        for (int j = 1; j < assignementProblem.getAssignmentData().getLength(); j = j + 1) {
-            System.out.println("Tabu size " + j);
-            assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME), j); //parameter optima, to know the convergence
+        
+        int[] sizes = {1, 2, 3, 10, 100, 1000, 10000};
+        HashMap<Integer, Integer> optima = new HashMap<>(sizes.length);
+        for (int size : sizes) {
+            System.out.println("Tabu size " + size);
+            assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME), size); //parameter optima, to know the convergence
+            optima.put(size, assignementProblem.getF().apply(assignementProblem.getOutCombination()));
             assignementProblem.printOutput();
-            System.out.println("\n");
+            System.out.println();
         }
+        
+        return optima;
     }
 
     /**

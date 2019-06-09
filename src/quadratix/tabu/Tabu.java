@@ -79,7 +79,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @return Return the optimal point if found.
 	 */
 	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, final int maxIteration, @Nullable R optima) {
-		Integer firstIteration = -1;
+		int firstIteration = -1;
 		fitnessCall.reset();
 		TabuList<P, P> T = new TabuList<>(tabuSize);
 		
@@ -95,7 +95,7 @@ public class Tabu<P, R> implements ISearch<P, R> {
 		int i = 0;
 		
 		do {
-			if(firstIteration == -1 && optima != null && rOperation.compare(fmin, optima) == 0){
+			if (firstIteration == -1 && optima != null && rOperation.compare(fmin, optima) == 0) {
 				firstIteration = i;
 			}
 
@@ -152,12 +152,13 @@ public class Tabu<P, R> implements ISearch<P, R> {
 				i++;
 			}
 		} while (i < maxIteration && !C.isEmpty());
-
-		if(firstIteration!= -1) {
+		
+		if (firstIteration != -1) {
 			System.out.println("Optima BFK reached at iteration " + firstIteration);
-		}else if(optima != null){
+		} else if (optima != null) {
 			System.out.println("Optima BFK not reached");
 		}
+		
 		return xmin;
 	}
 
