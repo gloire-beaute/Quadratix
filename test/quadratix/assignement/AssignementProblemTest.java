@@ -277,7 +277,7 @@ class AssignementProblemTest {
             fileHandler.writeLogs(outputs);
 
             System.out.println("\n");
-            System.out.println("Average recuit " + sum / combinationArrayList.size());
+            System.out.println("Average " + algo.toString() + " " + sum / combinationArrayList.size());
             System.out.println("Minimum found " + min);
             System.out.println("Optimum " + optima + " found " + optimumReached + " times");
             System.out.println("Execution time " + stopwatch.elapsedMs() + " microsec");
