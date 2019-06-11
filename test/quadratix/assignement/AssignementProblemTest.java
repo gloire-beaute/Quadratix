@@ -28,7 +28,7 @@ class AssignementProblemTest {
      * 1 : n permutations aléatoires ou n = taille de taillard
      * 2 : toutes les permutations entre 2 élements à moins de d de distance ou d à fixer
      */
-    private static final int NEIGHBORHOOD_TYPE = 1; // 0,1,2
+    private static final int NEIGHBORHOOD_TYPE = 0; // 0,1,2
 
     // RECUIT
     private static final int MAX_ITERATION_COMPUTE_T0 = 10;
@@ -178,20 +178,34 @@ class AssignementProblemTest {
 	 * Execute the tabu algorithm with different neighborhood types.
 	 * @param taillardFilename The taillard filename.
 	 */
-    private void neighborhoodTypeTestWith(@NotNull String taillardFilename) throws IOException {
+    private HashMap<Integer, Integer> neighborhoodTypeTestWith(@NotNull String taillardFilename) throws IOException {
         assignementProblem.taillardInitializer(taillardFilename);
         Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
 	    assignementProblem.setInCombination(inComb);
+        int optimumReached;
+        int optimum, output;
+        final int maxIterations = 100;
 	
 	    int[] neighborhoodTypes = {0, 1, 2};
+        HashMap<Integer, Integer> optima = new HashMap<>(neighborhoodTypes.length);
 	    for (int neighborhoodType : neighborhoodTypes) {
-		    System.out.println("Neighborhood type: " + neighborhoodType);
+            optimumReached = 0;
+		    System.out.println("Neighborhood type: " + (neighborhoodType+1));
 		    assignementProblem.setNeighborsFunction(NEIGHBORHOOD_TYPE, assignementProblem.getAssignmentData().getLength());
-		    assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(taillardFilename), TABU_SIZE); //parameter optima, to know the convergence
-		    //optima.put(size, assignementProblem.getF().apply(assignementProblem.getOutCombination()));
-		    assignementProblem.printOutput();
-		    System.out.println();
+		    optimum = SearchTestUtil.taillardOptima.get(taillardFilename);
+		    
+		    for (int i = 0 ; i < maxIterations; i++) {
+                assignementProblem.tabuAlgortihm(optimum, TABU_SIZE); //parameter optima, to know the convergence
+                output = assignementProblem.getF().apply(assignementProblem.getOutCombination());
+                optima.put(neighborhoodType, output);
+                //assignementProblem.printOutput();
+                if (output == optimum) optimumReached++;
+            }
+            System.out.println("Optimum " + optimum + " found " + optimumReached + " time" + (optimumReached > 1 ? "s" : "") + " = " + ((double) optimumReached/ (double) maxIterations)*100d + "%");
+		    //System.out.println();
 	    }
+	    
+	    return optima;
     }
 
     /**
