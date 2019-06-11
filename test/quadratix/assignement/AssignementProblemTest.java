@@ -147,6 +147,7 @@ class AssignementProblemTest {
      * @return Return a map where the keys are the tabu sizes and the values are the optima found.
      */
     private HashMap<Integer, Integer> tabuSizeTestWith(@NotNull String taillardFilename) throws IOException {
+        assignementProblem.taillardInitializer(taillardFilename);
         Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
         assignementProblem.setInCombination(inComb);
         
@@ -154,7 +155,6 @@ class AssignementProblemTest {
         HashMap<Integer, Integer> optima = new HashMap<>(sizes.length);
         for (int size : sizes) {
             System.out.println("Tabu size " + size);
-	        assignementProblem.taillardInitializer(taillardFilename);
             assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(taillardFilename), size); //parameter optima, to know the convergence
             optima.put(size, assignementProblem.getF().apply(assignementProblem.getOutCombination()));
             assignementProblem.printOutput();
