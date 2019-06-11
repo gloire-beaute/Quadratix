@@ -279,7 +279,7 @@ class AssignementProblemTest {
             System.out.println("\n");
             System.out.println("Average " + algo.toString() + " " + sum / combinationArrayList.size());
             System.out.println("Minimum found " + min);
-            System.out.println("Optimum " + optima + " found " + optimumReached/ combinationArrayList.size() + " times");
+            System.out.println("Optimum " + optima + " found at " + (optimumReached*100)/ combinationArrayList.size() + "%");
             System.out.println("Execution time " + stopwatch.elapsedMs() + " microsec");
 
         } catch (IOException e) {
