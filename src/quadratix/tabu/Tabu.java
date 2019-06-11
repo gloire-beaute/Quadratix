@@ -53,6 +53,8 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 *          -&gt; x'), and the invert function (x' -&gt; x).
 	 * @param rOperation The operations we can apply on `R`.
 	 * @param tabuSize The fixed size of the tabu list. By default, the fixed size is 1.
+	 * @param optima The optimum of the problem. If it is given, the algorithm will print when the optimum is found for
+	 *               the first time. Default value is {@code null}.
 	 * @return Return the optimal point if found.
 	 */
 	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, @Nullable R optima) {
@@ -76,6 +78,8 @@ public class Tabu<P, R> implements ISearch<P, R> {
 	 * @param rOperation The operations we can apply on `R`.
 	 * @param tabuSize The fixed size of the tabu list. By default, the fixed size is 1.
 	 * @param maxIteration The maximum number of iterations the algorithm can do.
+	 * @param optima The optimum of the problem. If it is given, the algorithm will print when the optimum is found for
+	 *               the first time. Default value is {@code null}.
 	 * @return Return the optimal point if found.
 	 */
 	public P search(@NotNull final Function<P, R> f, final P x0, @NotNull final Function<P, HashMap<P, ElementaryFunction<P>>> V, @NotNull final NumberOperations<R> rOperation, final int tabuSize, final int maxIteration, @Nullable R optima) {
