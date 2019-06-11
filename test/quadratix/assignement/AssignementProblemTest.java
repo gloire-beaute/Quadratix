@@ -1,8 +1,7 @@
 package quadratix.assignement;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import quadratix.ElementaryFunction;
 import quadratix.SearchTestUtil;
 import quadratix.combination.Combination;
@@ -17,6 +16,7 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AssignementProblemTest {
 
     private AssignementProblem assignementProblem = new AssignementProblem();
@@ -28,7 +28,7 @@ class AssignementProblemTest {
      * 1 : n permutations aléatoires ou n = taille de taillard
      * 2 : toutes les permutations entre 2 élements à moins de d de distance ou d à fixer
      */
-    private static final int NEIGHBORHOOD_TYPE = 0; // 0,1,2
+    private static final int NEIGHBORHOOD_TYPE = 1; // 0,1,2
 
     // RECUIT
     private static final int MAX_ITERATION_COMPUTE_T0 = 10;
@@ -50,28 +50,11 @@ class AssignementProblemTest {
         }
     }
 
-    @Test
-    void tabuAlgorithmOnRangeOfValues() {
-        executeAlgoRangeOfValues(
-                SearchTestUtil.ALGO.TABU,
-                this.assignementProblem,
-                TABU_SIZE,
-                SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME));
-    }
-
-    @Test
-    void recuitAlgorithmOnRangeOfValues() {
-        executeAlgoRangeOfValues(
-                SearchTestUtil.ALGO.RECUIT,
-                this.assignementProblem,
-                null,
-                SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME));
-    }
-
     /**
      * Test 2 algorithms for current file
      */
     @Test
+    @Order(1)
     void algorithms() {
 
         Combination initialComb = new Combination();
@@ -84,6 +67,27 @@ class AssignementProblemTest {
     }
 
     @Test
+    @Order(2)
+    void tabuAlgorithmOnRangeOfValues() {
+        executeAlgoRangeOfValues(
+                SearchTestUtil.ALGO.TABU,
+                this.assignementProblem,
+                TABU_SIZE,
+                SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME));
+    }
+
+    @Test
+    @Order(3)
+    void recuitAlgorithmOnRangeOfValues() {
+        executeAlgoRangeOfValues(
+                SearchTestUtil.ALGO.RECUIT,
+                this.assignementProblem,
+                null,
+                SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME));
+    }
+
+    @Test
+    @Order(4)
     void computeTemperature() {
         ArrayList<Integer> deltaFs = new ArrayList<>(MAX_ITERATION_COMPUTE_T0);
         Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> neighborsGenerator = Combination.generateAllNeighbors();
@@ -123,7 +127,9 @@ class AssignementProblemTest {
      * Test tabu list size impact
      */
     @Test
+    @Order(8)
     void tabuSizeTest() throws IOException {
+        //TODO beaucoup trop long print que les premières
         for (String taillardFilename : SearchTestUtil.taillardFilenames) {
             System.out.println("-----------------");
             System.out.println("Run " + taillardFilename);
@@ -133,6 +139,7 @@ class AssignementProblemTest {
     }
 
     @Test
+    @Order(5)
     void tabuSizeTestCurrentTaillard() throws IOException {
         ArrayList<Integer> optima = new ArrayList<>(tabuSizeTestWith(TAILLARD_FILENAME).keySet());
     
@@ -166,13 +173,21 @@ class AssignementProblemTest {
     }
     
     @Test
+    @Order(7)
     void neighborhoodTypeTest() throws IOException {
-	    for (String taillardFilename : SearchTestUtil.taillardFilenames) {
+        //TODO beaucoup trop long print que les premières
+        for (String taillardFilename : SearchTestUtil.taillardFilenames) {
 		    System.out.println("-----------------");
 		    System.out.println("Run " + taillardFilename);
 		    System.out.println("-----------------");
 		    neighborhoodTypeTestWith(taillardFilename);
 	    }
+    }
+
+    @Test
+    @Order(6)
+    void neighborhoodTypeCurrentTaillard() throws IOException {
+        neighborhoodTypeTestWith(TAILLARD_FILENAME).keySet();
     }
     
 	/**
@@ -202,8 +217,8 @@ class AssignementProblemTest {
                 //assignementProblem.printOutput();
                 if (output == optimum) optimumReached++;
             }
-            System.out.println("Optimum " + optimum + " found " + optimumReached + " time" + (optimumReached > 1 ? "s" : "") + " = " + ((double) optimumReached/ (double) maxIterations)*100d + "%");
-		    //System.out.println();
+            System.out.println("\nOptimum " + optimum + " found " + optimumReached + " time" + (optimumReached > 1 ? "s" : "") + " = " + ((double) optimumReached/ (double) maxIterations)*100d + "%");
+		    System.out.println();
 	    }
 	    
 	    return optima;
@@ -213,6 +228,7 @@ class AssignementProblemTest {
      * Compute all results for each taillard instance
      */
     @Test
+    @Order(9)
     void taillardTest() {
         try {
 
@@ -234,6 +250,7 @@ class AssignementProblemTest {
      * Compute all results for each taillard instance
      */
     @Test
+    @Order(10)
     void taillardTestMoreIterations() {
         try {
 
