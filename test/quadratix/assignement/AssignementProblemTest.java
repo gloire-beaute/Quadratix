@@ -148,6 +148,7 @@ class AssignementProblemTest {
      */
     private HashMap<Integer, Integer> tabuSizeTestWith(@NotNull String taillardFilename) throws IOException {
         assignementProblem.taillardInitializer(taillardFilename);
+        assignementProblem.setNeighborsFunction(NEIGHBORHOOD_TYPE,assignementProblem.getAssignmentData().getLength());
         Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
         assignementProblem.setInCombination(inComb);
         
