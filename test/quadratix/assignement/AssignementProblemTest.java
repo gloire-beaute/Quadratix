@@ -179,13 +179,13 @@ class AssignementProblemTest {
 	 * @param taillardFilename The taillard filename.
 	 */
     private void neighborhoodTypeTestWith(@NotNull String taillardFilename) throws IOException {
-	    Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
+        assignementProblem.taillardInitializer(taillardFilename);
+        Combination inComb = Combination.generateRandom(assignementProblem.getAssignmentData().getLength());
 	    assignementProblem.setInCombination(inComb);
 	
 	    int[] neighborhoodTypes = {0, 1, 2};
 	    for (int neighborhoodType : neighborhoodTypes) {
 		    System.out.println("Neighborhood type: " + neighborhoodType);
-		    assignementProblem.taillardInitializer(taillardFilename);
 		    assignementProblem.setNeighborsFunction(NEIGHBORHOOD_TYPE, assignementProblem.getAssignmentData().getLength());
 		    assignementProblem.tabuAlgortihm(SearchTestUtil.taillardOptima.get(taillardFilename), TABU_SIZE); //parameter optima, to know the convergence
 		    //optima.put(size, assignementProblem.getF().apply(assignementProblem.getOutCombination()));
