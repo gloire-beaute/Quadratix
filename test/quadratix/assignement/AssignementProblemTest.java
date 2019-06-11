@@ -245,8 +245,11 @@ class AssignementProblemTest {
     /**
      * Test 100 iterations for choosen algorithm. Compute average solution, best solution and time.
      * Save result in log file
-     *
-     * @param algo enum algo recuit or tabu
+     * @param algo enum algo recuit or tabu.
+     * @param assignementProblem The problem to resolve.
+     * @param tabuSize The size of the {@link quadratix.tabu.TabuList}.
+     * @param optima The optimum of the function for statistic purposes.
+     * @see quadratix.tabu.TabuList
      */
     private void executeAlgoRangeOfValues(SearchTestUtil.ALGO algo, AssignementProblem assignementProblem, Integer tabuSize, Integer optima) {
         try {
