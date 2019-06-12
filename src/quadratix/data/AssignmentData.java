@@ -6,6 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+/**
+ * Gather all essential information to resolve an assignement proble.
+ * @see quadratix.assignement.AssignementProblem
+ */
 public class AssignmentData {
 
     private Integer length;
