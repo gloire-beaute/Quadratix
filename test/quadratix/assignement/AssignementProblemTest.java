@@ -1,7 +1,6 @@
 package quadratix.assignement;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import quadratix.ElementaryFunction;
 import quadratix.SearchTestUtil;
 import quadratix.combination.Combination;
@@ -16,6 +15,7 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class AssignementProblemTest {
 
     private AssignementProblem assignementProblem = new AssignementProblem();
@@ -48,31 +48,14 @@ class AssignementProblemTest {
             e.printStackTrace();
         }
     }
-
-    @Test
-    void tabuAlgorithmOnRangeOfValues() {
-        executeAlgoRangeOfValues(
-                SearchTestUtil.ALGO.TABU,
-                this.assignementProblem,
-                TABU_SIZE,
-                SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME));
-    }
-
-    @Test
-    void recuitAlgorithmOnRangeOfValues() {
-        executeAlgoRangeOfValues(
-                SearchTestUtil.ALGO.RECUIT,
-                this.assignementProblem,
-                null,
-                SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME));
-    }
-
+    
     /**
      * Test 2 algorithms for current file
      */
     @Test
+    @Order(1)
     void algorithms() {
-
+        
         Combination initialComb = new Combination();
         for (int i = 0; i < assignementProblem.getAssignmentData().getLength(); i++) {
             initialComb.add((long) i + 1);
@@ -83,6 +66,27 @@ class AssignementProblemTest {
     }
 
     @Test
+    @Order(2)
+    void tabuAlgorithmOnRangeOfValues() {
+        executeAlgoRangeOfValues(
+                SearchTestUtil.ALGO.TABU,
+                this.assignementProblem,
+                TABU_SIZE,
+                SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME));
+    }
+
+    @Test
+    @Order(3)
+    void recuitAlgorithmOnRangeOfValues() {
+        executeAlgoRangeOfValues(
+                SearchTestUtil.ALGO.RECUIT,
+                this.assignementProblem,
+                null,
+                SearchTestUtil.taillardOptima.get(TAILLARD_FILENAME));
+    }
+
+    @Test
+    @Order(4)
     void computeTemperature() {
         ArrayList<Integer> deltaFs = new ArrayList<>(MAX_ITERATION_COMPUTE_T0);
         Function<Combination, HashMap<Combination, ElementaryFunction<Combination>>> neighborsGenerator = Combination.generateAllNeighbors();
@@ -122,6 +126,7 @@ class AssignementProblemTest {
      * Test tabu list size impact
      */
     @Test
+    @Order(6)
     void tabuSizeTest() {
         for (String taillardFilename : SearchTestUtil.taillardFilenames) {
             System.out.println("-----------------");
@@ -132,6 +137,7 @@ class AssignementProblemTest {
     }
 
     @Test
+    @Order(5)
     void tabuSizeTestCurrentTaillard() {
         ArrayList<Integer> optima = new ArrayList<>(tabuSizeTestWith(TAILLARD_FILENAME).keySet());
     
@@ -166,6 +172,7 @@ class AssignementProblemTest {
      * Compute all results for each taillard instance
      */
     @Test
+    @Order(7)
     void taillardTest() {
         try {
 
@@ -187,6 +194,7 @@ class AssignementProblemTest {
      * Compute all results for each taillard instance
      */
     @Test
+    @Order(8)
     void taillardTestMoreIterations() {
         try {
 
