@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.function.Function;
 
+/**
+ * Class representing an assignement problem.
+ * @see AssignmentData
+ */
 public class AssignementProblem {
 
     private AssignmentData assignmentData = new AssignmentData();
